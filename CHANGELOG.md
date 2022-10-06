@@ -1,5 +1,12 @@
 # @reusejs/documentor
 
+## 0.0.5
+
+### Patch Changes
+
+- 7c7b6f1: Publish
+- b0f89fc: Remove dep
+
 ## 0.0.3
 
 ### Patch Changes
