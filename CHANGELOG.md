@@ -1,5 +1,11 @@
 # @reusejs/documentor
 
+## 0.0.6
+
+### Patch Changes
+
+- 0b7ec6c: Rebuild
+
 ## 0.0.5
 
 ### Patch Changes
