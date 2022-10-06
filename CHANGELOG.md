@@ -1,5 +1,11 @@
 # @reusejs/documentor
 
+## 0.0.10
+
+### Patch Changes
+
+- 45576f8: fix issues
+
 ## 0.0.9
 
 ### Patch Changes
