@@ -43,8 +43,8 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "verbum",
-  "author": "Ozan Yurtsever",
+  "name": "@reusejs/lexical",
+  "author": "Rajiv Seelam",
   "module": "dist/verbum.esm.js",
   "size-limit": [
     {
