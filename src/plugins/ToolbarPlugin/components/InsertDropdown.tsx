@@ -411,7 +411,7 @@ const InsertDropdown: React.FC<IInsertDropdownProps> = ({
             <span className="text">Image</span>
           </button>
         )}
-        {enableExcalidraw && (
+        {/* {enableExcalidraw && (
           <button
             onClick={() => {
               activeEditor.dispatchCommand(
@@ -425,7 +425,7 @@ const InsertDropdown: React.FC<IInsertDropdownProps> = ({
             <i className="icon diagram-2" />
             <span className="text">Excalidraw</span>
           </button>
-        )}
+        )} */}
         {enableTable && (
           <div>
             <button
