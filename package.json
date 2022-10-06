@@ -26,7 +26,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "format": "prettier --write 'src/**/*.{ts,tsx,scss,css,json}'",
-    "isready": "npm run format && npm run build"
+    "isready": "npm run format && npm run build",
+    "dev": "concurrently 'yarn start' 'yarn storybook'"
   },
   "peerDependencies": {
     "react": "^18.1.0",
@@ -74,6 +75,7 @@
     "@types/resize-observer-browser": "^0.1.7",
     "autoprefixer": "^10.4.7",
     "babel-loader": "^8.2.5",
+    "concurrently": "^7.4.0",
     "cssnano": "^5.1.9",
     "husky": "^8.0.1",
     "postcss": "^8.4.14",

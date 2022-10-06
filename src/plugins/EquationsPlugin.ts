@@ -8,7 +8,7 @@
 
 import type { LexicalCommand } from 'lexical';
 
-import 'katex/dist/katex.css';
+// import 'katex/dist/katex.css';
 
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
