@@ -1,5 +1,11 @@
 # @reusejs/documentor
 
+## 0.0.9
+
+### Patch Changes
+
+- 9c2587f: enable window ref
+
 ## 0.0.8
 
 ### Patch Changes
