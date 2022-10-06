@@ -43,7 +43,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@reusejs/lexical",
+  "name": "@reusejs/documentor",
   "author": "Rajiv Seelam",
   "module": "dist/verbum.esm.js",
   "size-limit": [
