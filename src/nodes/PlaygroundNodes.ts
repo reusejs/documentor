@@ -21,7 +21,7 @@ import { Class } from 'utility-types';
 
 import { EmojiNode } from './EmojiNode';
 import { EquationNode } from './EquationNode';
-import { ExcalidrawNode } from './ExcalidrawNode';
+// import { ExcalidrawNode } from './ExcalidrawNode';
 import { ImageNode } from './ImageNode';
 import { KeywordNode } from './KeywordNode';
 import { MentionNode } from './MentionNode';
@@ -50,7 +50,7 @@ const PlaygroundNodes: Array<Class<LexicalNode>> = [
   ImageNode,
   MentionNode,
   EmojiNode,
-  ExcalidrawNode,
+  // ExcalidrawNode,
   EquationNode,
   TypeaheadNode,
   KeywordNode,
