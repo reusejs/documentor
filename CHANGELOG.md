@@ -1,5 +1,11 @@
 # @reusejs/documentor
 
+## 0.0.7
+
+### Patch Changes
+
+- ed21715: Remove excalidraw node
+
 ## 0.0.6
 
 ### Patch Changes
