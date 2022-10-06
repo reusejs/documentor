@@ -16,7 +16,7 @@ import type {
 
 import './StickyNode.css';
 
-// import { CollaborationPlugin } from '@lexical/react/LexicalCollaborationPlugin';
+import { CollaborationPlugin } from '@lexical/react/LexicalCollaborationPlugin';
 
 import { useCollaborationContext } from '@lexical/react/LexicalCollaborationContext';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
@@ -35,7 +35,7 @@ import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import useLayoutEffect from '../shared/src/useLayoutEffect';
 
-// import { createWebsocketProvider } from '../collaboration';
+import { createWebsocketProvider } from '../collaboration';
 import { useSharedHistoryContext } from '../context/SharedHistoryContext';
 import StickyEditorTheme from '../themes/StickyEditorTheme';
 import ContentEditable from '../ui/ContentEditable';
@@ -250,7 +250,7 @@ function StickyComponent({
           initialEditor={caption}
           initialTheme={StickyEditorTheme}
         >
-          {/* {isCollab ? (
+          {isCollab ? (
             <CollaborationPlugin
               id={caption.getKey()}
               providerFactory={createWebsocketProvider}
@@ -258,7 +258,7 @@ function StickyComponent({
             />
           ) : (
             <HistoryPlugin externalHistoryState={historyState} />
-          )} */}
+          )}
 
           <HistoryPlugin externalHistoryState={historyState} />
           <PlainTextPlugin
