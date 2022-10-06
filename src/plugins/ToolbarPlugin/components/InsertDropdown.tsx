@@ -11,9 +11,9 @@ import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/react/LexicalHorizontal
 import EquationsPlugin, {
   INSERT_EQUATION_COMMAND,
 } from '../../EquationsPlugin';
-import ExcalidrawPlugin, {
-  INSERT_EXCALIDRAW_COMMAND,
-} from '../../ExcalidrawPlugin';
+// import ExcalidrawPlugin, {
+//   INSERT_EXCALIDRAW_COMMAND,
+// } from '../../ExcalidrawPlugin';
 import PollPlugin, { INSERT_POLL_COMMAND } from '../../PollPlugin';
 import TwitterPlugin, { INSERT_TWEET_COMMAND } from '../../TwitterPlugin';
 import YouTubePlugin, { INSERT_YOUTUBE_COMMAND } from '../../YouTubePlugin';
@@ -370,7 +370,7 @@ const InsertDropdown: React.FC<IInsertDropdownProps> = ({
       {enablePoll && <PollPlugin />}
       {enableImage && <ImagesPlugin />}
       {enableEquations && <EquationsPlugin />}
-      {enableExcalidraw && <ExcalidrawPlugin />}
+      {/* {enableExcalidraw && <ExcalidrawPlugin />} */}
       {enableHorizontalRule && <HorizontalRulePlugin />}
 
       <DropDown
