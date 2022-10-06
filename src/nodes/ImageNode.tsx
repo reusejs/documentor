@@ -17,7 +17,7 @@ import type {
 
 import './ImageNode.css';
 
-import { CollaborationPlugin } from '@lexical/react/LexicalCollaborationPlugin';
+// import { CollaborationPlugin } from '@lexical/react/LexicalCollaborationPlugin';
 import { useCollaborationContext } from '@lexical/react/LexicalCollaborationContext';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin';
@@ -43,7 +43,7 @@ import { Spread } from 'libdefs/globals';
 import * as React from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 
-import { createWebsocketProvider } from '../collaboration';
+// import { createWebsocketProvider } from '../collaboration';
 import { useSettings } from '../context/SettingsContext';
 import { useSharedHistoryContext } from '../context/SharedHistoryContext';
 import EmojisPlugin from '../plugins/EmojisPlugin';
@@ -268,7 +268,7 @@ function ImageComponent({
               <EmojisPlugin />
               <HashtagPlugin />
               <KeywordsPlugin />
-              {isCollab ? (
+              {/* {isCollab ? (
                 <CollaborationPlugin
                   id={caption.getKey()}
                   providerFactory={createWebsocketProvider}
@@ -276,7 +276,9 @@ function ImageComponent({
                 />
               ) : (
                 <HistoryPlugin externalHistoryState={historyState} />
-              )}
+              )} */}
+
+              <HistoryPlugin externalHistoryState={historyState} />
               <RichTextPlugin
                 contentEditable={
                   <ContentEditable className="ImageNode__contentEditable" />
