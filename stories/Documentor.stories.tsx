@@ -23,7 +23,7 @@ import {
 } from '../src/plugins/ToolbarPlugin/components';
 
 export default {
-  title: 'Verbum',
+  title: 'Documentor',
 };
 
 export const FullEditor = () => (

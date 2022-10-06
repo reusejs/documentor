@@ -10,7 +10,7 @@ interface IEditorComposer {
 
 const EditorComposer = ({ children }: IEditorComposer) => {
   const initialConfig = {
-    namespace: 'VerbumEditor',
+    namespace: 'ReuseJSDocumentorEditor',
     nodes: [...PlaygroundNodes],
     onError: (error) => {
       throw error;

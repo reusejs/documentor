@@ -1,20 +1,19 @@
-# Verbum
+# Documentor
 
-Verbum - Flexible Text Editor for React
+Documentor - Flexible Text Editor for React
 
-**Verbum** is a fully flexible rich text editor based on [`lexical-playground`](https://github.com/facebook/lexical/tree/main/packages/lexical-playground) and [`lexical`](https://github.com/facebook/lexical) framework.
+**Documentor** is a fully flexible rich text editor based on [`lexical-playground`](https://github.com/facebook/lexical/tree/main/packages/lexical-playground) and [`lexical`](https://github.com/facebook/lexical) framework.
 
 **⚠️ As the Lexical framework is currently in early development, this component library is also likely to change quite often**
 
 ## Installation
 
 ```
-npm install verbum --save
+npm install @reusejs/documentor --save
 ```
 
 ## Demo
 
-![Demo](verbum-demo.gif)
 Live demo is coming soon...
 
 ## Usage
@@ -39,7 +38,7 @@ import {
   TextFormatDropdown,
   UnderlineButton,
   Divider,
-} from 'verbum';
+} from '@reusejs/documentor';
 
 const NoteViewer: FC = () => {
   return (
@@ -83,18 +82,18 @@ Coming soon... -->
 
 `<Editor />`
 
-| Property           | Type              |          | description                                                                        |
-| ------------------ | ----------------- | -------- | ---------------------------------------------------------------------------------- |
-| children           | `ReactNode`       | optional | Nested child components, like the `ToolbarPlugin`                                  |
-| hashtagsEnabled    | `boolean`         | optional | Enables the automatic hashtag highlighting, default is `false`                     |
-| autoLinkEnabled    | `boolean`         | optional | Enables the automatic link highlighting, default is `false`                        |
-| emojisEnabled      | `boolean`         | optional | Replaces the emoji combiniations with its corresponding symbol, default is `false` |
-| actionsEnabled     | `boolean`         | optional | Enables the actions toolbar, default is `false`                                    |
-| placeholder        | `string`          | optional | The default content of the editor when it is first loaded                          |
-| listMaxIndent      | `number`          | optional | The maximum indent capacity of any listed element, the default is `7`              |
-| isReadOnly         | `boolean`         | optional | Enables read-only mode for the editor, default is `false`                          |
-| initialEditorState | `string`          | optional | JSON string to initialize the initial content of the editor.                       |
-| onChange           | `(editorState: string, editorInstance?: LexicalEditor) => void` | optional | Accessing the current editor state and the active editor instance                                                 |
+| Property           | Type                                                            |          | description                                                                        |
+| ------------------ | --------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------- |
+| children           | `ReactNode`                                                     | optional | Nested child components, like the `ToolbarPlugin`                                  |
+| hashtagsEnabled    | `boolean`                                                       | optional | Enables the automatic hashtag highlighting, default is `false`                     |
+| autoLinkEnabled    | `boolean`                                                       | optional | Enables the automatic link highlighting, default is `false`                        |
+| emojisEnabled      | `boolean`                                                       | optional | Replaces the emoji combiniations with its corresponding symbol, default is `false` |
+| actionsEnabled     | `boolean`                                                       | optional | Enables the actions toolbar, default is `false`                                    |
+| placeholder        | `string`                                                        | optional | The default content of the editor when it is first loaded                          |
+| listMaxIndent      | `number`                                                        | optional | The maximum indent capacity of any listed element, the default is `7`              |
+| isReadOnly         | `boolean`                                                       | optional | Enables read-only mode for the editor, default is `false`                          |
+| initialEditorState | `string`                                                        | optional | JSON string to initialize the initial content of the editor.                       |
+| onChange           | `(editorState: string, editorInstance?: LexicalEditor) => void` | optional | Accessing the current editor state and the active editor instance                  |
 
 <br />
 

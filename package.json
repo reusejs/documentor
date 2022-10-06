@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
+  "version": "0.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -45,14 +45,14 @@
   },
   "name": "@reusejs/documentor",
   "author": "Rajiv Seelam",
-  "module": "dist/verbum.esm.js",
+  "module": "dist/documentor.esm.js",
   "size-limit": [
     {
-      "path": "dist/verbum.cjs.production.min.js",
+      "path": "dist/documentor.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/verbum.esm.js",
+      "path": "dist/documentor.esm.js",
       "limit": "10 KB"
     }
   ],
@@ -113,6 +113,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ozanyurtsever/verbum"
+    "url": "https://github.com/reusejs/documentor"
   }
 }
