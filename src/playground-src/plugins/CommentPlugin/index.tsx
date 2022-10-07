@@ -6,21 +6,13 @@
  *
  */
 
-import {
-  Comment,
-  Comments,
-  CommentStore,
-  createComment,
-  createThread,
-  Thread,
-  useCommentStore,
-} from '../../commenting';
 import type {
   EditorState,
   LexicalCommand,
   LexicalEditor,
   NodeKey,
 } from 'lexical';
+import type { Doc } from 'yjs';
 
 import './index.css';
 
@@ -34,6 +26,7 @@ import {
 } from '@lexical/mark';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
+import { useCollaborationContext } from '@lexical/react/LexicalCollaborationContext';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
@@ -56,15 +49,22 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 import useLayoutEffect from '../../../shared/src/useLayoutEffect';
+import { WebsocketProvider } from 'y-websocket';
 
+import {
+  Comment,
+  Comments,
+  CommentStore,
+  createComment,
+  createThread,
+  Thread,
+  useCommentStore,
+} from '../../commenting';
 import useModal from '../../hooks/useModal';
 import CommentEditorTheme from '../../themes/CommentEditorTheme';
 import Button from '../../ui/Button';
 import ContentEditable from '../../ui/ContentEditable';
 import Placeholder from '../../ui/Placeholder';
-import type { Doc } from 'yjs';
-import { useCollaborationContext } from '@lexical/react/LexicalCollaborationContext';
-import { WebsocketProvider } from 'y-websocket';
 
 export const INSERT_INLINE_COMMAND: LexicalCommand<void> = createCommand();
 
@@ -109,7 +109,6 @@ function AddCommentBox({
       <button
         className="CommentPlugin_AddCommentBox_button"
         onClick={onAddComment}
-        type="button"
       >
         <i className="icon add-comment" />
       </button>
@@ -463,7 +462,7 @@ function CommentsPanelListComment({
     // eslint-disable-next-line no-shadow
     thread?: Thread
   ) => void;
-  rtf: null; //FIXME: Intl.RelativeTimeFormat gives build error;
+  rtf: Intl.RelativeTimeFormat;
   thread?: Thread;
 }): JSX.Element {
   const seconds = Math.round((comment.timeStamp - performance.now()) / 1000);
@@ -477,7 +476,7 @@ function CommentsPanelListComment({
           {comment.author}
         </span>
         <span className="CommentPlugin_CommentsPanel_List_Comment_Time">
-          {/* · {seconds > -10 ? 'Just now' : rtf.format(minutes, 'minute')} */}
+          · {seconds > -10 ? 'Just now' : rtf.format(minutes, 'minute')}
         </span>
       </div>
       <p
@@ -536,16 +535,15 @@ function CommentsPanelList({
   const [editor] = useLexicalComposerContext();
   const [counter, setCounter] = useState(0);
   const [modal, showModal] = useModal();
-  // const rtf = useMemo(
-  //   () =>
-  //     new Intl.RelativeTimeFormat('en', {
-  //       localeMatcher: 'best fit',
-  //       numeric: 'auto',
-  //       style: 'short',
-  //     }),
-  //   []
-  // ); //FIXME: it is closed to fix a build error
-  const rtf = null;
+  const rtf = useMemo(
+    () =>
+      new Intl.RelativeTimeFormat('en', {
+        localeMatcher: 'best fit',
+        numeric: 'auto',
+        style: 'short',
+      }),
+    []
+  );
 
   useEffect(() => {
     // Used to keep the time stamp up to date
