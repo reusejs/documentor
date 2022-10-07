@@ -27,13 +27,17 @@ export default {
 };
 
 export const FullEditor = () => (
-  <EditorComposer>
+  <EditorComposer
+    initialEditorState={
+      '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Rajiv Seelam","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"heading","version":1,"tag":"h1"}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+    }
+  >
     <Editor
       onChange={(payload: any) => {
         console.log('onChange', payload);
       }}
     >
-      <ToolbarPlugin>
+      <ToolbarPlugin defaultFontFamily="Verdana">
         <BoldButton />
         <ItalicButton />
         <UnderlineButton />

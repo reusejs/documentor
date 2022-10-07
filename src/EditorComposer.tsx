@@ -6,9 +6,10 @@ import './EditorComposer.css';
 
 interface IEditorComposer {
   children: React.ReactElement;
+  initialEditorState?: string;
 }
 
-const EditorComposer = ({ children }: IEditorComposer) => {
+const EditorComposer = ({ children, initialEditorState }: IEditorComposer) => {
   const initialConfig = {
     namespace: 'ReuseJSDocumentorEditor',
     nodes: [...PlaygroundNodes],
@@ -16,6 +17,7 @@ const EditorComposer = ({ children }: IEditorComposer) => {
       throw error;
     },
     theme: PlaygroundEditorTheme,
+    editorState: initialEditorState,
   };
   return (
     <LexicalComposer initialConfig={initialConfig}>
