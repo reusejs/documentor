@@ -37,6 +37,7 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import EditorContext from './context/EditorContext';
 import { LexicalEditor } from 'lexical';
+import { $generateHtmlFromNodes } from '@lexical/html';
 
 interface IEditorProps {
   children?: ReactNode;
@@ -47,7 +48,11 @@ interface IEditorProps {
   placeholder?: string;
   listMaxIndent?: number;
   isEditable?: boolean;
-  onChange?: (editorState: string, editorInstance?: LexicalEditor) => void;
+  onChange?: (
+    payload: any,
+    editorState: string,
+    editorInstance?: LexicalEditor
+  ) => void;
 }
 
 const Editor = ({
@@ -97,8 +102,16 @@ const Editor = ({
             placeholder={placeholderComponent}
           />
           <OnChangePlugin
-            onChange={(editorState) => {
-              onChange?.(JSON.stringify(editorState), activeEditor);
+            onChange={(editorState, editor: any) => {
+              editor.update(() => {
+                let payload: any = {};
+
+                const htmlString = $generateHtmlFromNodes(editor, null);
+                payload['html'] = htmlString;
+                payload['json'] = JSON.stringify(editor.getEditorState());
+                onChange?.(payload, JSON.stringify(editorState), activeEditor);
+              });
+
               return (editorStateRef.current = editorState);
             }}
           />
