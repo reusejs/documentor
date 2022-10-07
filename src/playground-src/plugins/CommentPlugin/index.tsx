@@ -6,6 +6,10 @@
  *
  */
 
+// import '@formatjs/intl-relativetimeformat/polyfill';
+// import '@formatjs/intl-relativetimeformat/locale-data/en'; // locale-data for en
+// import 'intl-relative-time-format';
+
 import type {
   EditorState,
   LexicalCommand,

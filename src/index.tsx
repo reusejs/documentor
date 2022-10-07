@@ -1,5 +1,5 @@
 import EditorComposer from './EditorComposer';
-import Editor from './playground-src/Editor';
+import Editor from './Editor';
 import ToolbarPlugin from './plugins/ToolbarPlugin/ToolbarPlugin';
 
 import {

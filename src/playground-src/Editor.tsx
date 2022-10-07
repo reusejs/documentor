@@ -6,131 +6,218 @@
  *
  */
 
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { AutoScrollPlugin } from '@lexical/react/LexicalAutoScrollPlugin';
-import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
-import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
-import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin';
-import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
-import { ListPlugin } from '@lexical/react/LexicalListPlugin';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { useRef } from 'react';
+import {AutoFocusPlugin} from '@lexical/react/LexicalAutoFocusPlugin';
+import {AutoScrollPlugin} from '@lexical/react/LexicalAutoScrollPlugin';
+import {CharacterLimitPlugin} from '@lexical/react/LexicalCharacterLimitPlugin';
+import {CheckListPlugin} from '@lexical/react/LexicalCheckListPlugin';
+import {ClearEditorPlugin} from '@lexical/react/LexicalClearEditorPlugin';
+import {CollaborationPlugin} from '@lexical/react/LexicalCollaborationPlugin';
+import {HashtagPlugin} from '@lexical/react/LexicalHashtagPlugin';
+import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
+import {LinkPlugin} from '@lexical/react/LexicalLinkPlugin';
+import {ListPlugin} from '@lexical/react/LexicalListPlugin';
+import {PlainTextPlugin} from '@lexical/react/LexicalPlainTextPlugin';
+import {RichTextPlugin} from '@lexical/react/LexicalRichTextPlugin';
+import {TablePlugin} from '@lexical/react/LexicalTablePlugin';
+import * as React from 'react';
+import {useRef, useState} from 'react';
 
-import { useSettings } from './context/SettingsContext';
-import { useSharedHistoryContext } from './context/SharedHistoryContext';
+import {createWebsocketProvider} from './collaboration';
+import {useSettings} from './context/SettingsContext';
+import {useSharedHistoryContext} from './context/SharedHistoryContext';
+import TableCellNodes from './nodes/TableCellNodes';
 import ActionsPlugin from './plugins/ActionsPlugin';
+import AutocompletePlugin from './plugins/AutocompletePlugin';
+import AutoEmbedPlugin from './plugins/AutoEmbedPlugin';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
-import CharacterStylesPopupPlugin from './plugins/CommentPlugin/CharacterStylesPopupPlugin';
 import ClickableLinkPlugin from './plugins/ClickableLinkPlugin';
+import CodeActionMenuPlugin from './plugins/CodeActionMenuPlugin';
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
+import CollapsiblePlugin from './plugins/CollapsiblePlugin';
+import CommentPlugin from './plugins/CommentPlugin';
+import ComponentPickerPlugin from './plugins/ComponentPickerPlugin';
+import DraggableBlockPlugin from './plugins/DraggableBlockPlugin';
 import EmojisPlugin from './plugins/EmojisPlugin';
+import EquationsPlugin from './plugins/EquationsPlugin';
+import ExcalidrawPlugin from './plugins/ExcalidrawPlugin';
+import FigmaPlugin from './plugins/FigmaPlugin';
+import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin';
+import FloatingTextFormatToolbarPlugin from './plugins/FloatingTextFormatToolbarPlugin';
+import HorizontalRulePlugin from './plugins/HorizontalRulePlugin';
+import ImagesPlugin from './plugins/ImagesPlugin';
 import KeywordsPlugin from './plugins/KeywordsPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import MarkdownShortcutPlugin from './plugins/MarkdownShortcutPlugin';
+import {MaxLengthPlugin} from './plugins/MaxLengthPlugin';
+import MentionsPlugin from './plugins/MentionsPlugin';
+import PollPlugin from './plugins/PollPlugin';
 import SpeechToTextPlugin from './plugins/SpeechToTextPlugin';
 import TabFocusPlugin from './plugins/TabFocusPlugin';
+import TableCellActionMenuPlugin from './plugins/TableActionMenuPlugin';
+import TableCellResizer from './plugins/TableCellResizer';
+import TableOfContentsPlugin from './plugins/TableOfContentsPlugin';
+import {TablePlugin as NewTablePlugin} from './plugins/TablePlugin';
+import ToolbarPlugin from './plugins/ToolbarPlugin';
+import TreeViewPlugin from './plugins/TreeViewPlugin';
+import TwitterPlugin from './plugins/TwitterPlugin';
+import YouTubePlugin from './plugins/YouTubePlugin';
+import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
 import ContentEditable from './ui/ContentEditable';
 import Placeholder from './ui/Placeholder';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import EditorContext from '../context/EditorContext';
-import { LexicalEditor } from 'lexical';
-import { $generateHtmlFromNodes } from '@lexical/html';
 
-interface IEditorProps {
-  children?: ReactNode;
-  hashtagsEnabled?: boolean;
-  autoLinkEnabled?: boolean;
-  emojisEnabled?: boolean;
-  actionsEnabled?: boolean;
-  placeholder?: string;
-  listMaxIndent?: number;
-  isEditable?: boolean;
-  onChange?: (
-    payload: any,
-    editorState: string,
-    editorInstance?: LexicalEditor
-  ) => void;
-}
+const skipCollaborationInit =
+  // @ts-ignore
+  window.parent != null && window.parent.frames.right === window;
 
-const Editor = ({
-  children,
-  hashtagsEnabled = false,
-  autoLinkEnabled = false,
-  emojisEnabled = false,
-  actionsEnabled = false,
-  listMaxIndent = 7,
-  placeholder = '',
-  isEditable = true,
-  onChange,
-}: IEditorProps) => {
-  const [editor] = useLexicalComposerContext();
-  const [activeEditor, setActiveEditor] = useState(editor);
-
-  const editorStateRef = useRef(null);
-  const { historyState } = useSharedHistoryContext();
+export default function Editor(): JSX.Element {
+  const {historyState} = useSharedHistoryContext();
   const {
-    settings: { isRichText },
+    settings: {
+      isCollab,
+      isAutocomplete,
+      isMaxLength,
+      isCharLimit,
+      isCharLimitUtf8,
+      isRichText,
+      showTreeView,
+      showTableOfContents,
+    },
   } = useSettings();
-  const placeholderComponent = <Placeholder>{placeholder}</Placeholder>;
+  const text = isCollab
+    ? 'Enter some collaborative rich text...'
+    : isRichText
+    ? 'Enter some rich text...'
+    : 'Enter some plain text...';
+  const placeholder = <Placeholder>{text}</Placeholder>;
   const scrollRef = useRef(null);
+  const [floatingAnchorElem, setFloatingAnchorElem] =
+    useState<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    editor.setEditable(isEditable);
-  }, []);
+  const onRef = (_floatingAnchorElem: HTMLDivElement) => {
+    if (_floatingAnchorElem !== null) {
+      setFloatingAnchorElem(_floatingAnchorElem);
+    }
+  };
+
+  const cellEditorConfig = {
+    namespace: 'Playground',
+    nodes: [...TableCellNodes],
+    onError: (error: Error) => {
+      throw error;
+    },
+    theme: PlaygroundEditorTheme,
+  };
 
   return (
-    <EditorContext.Provider
-      value={{ initialEditor: editor, activeEditor, setActiveEditor }}
-    >
-      {children}
-      <div className={`editor-container`} ref={scrollRef}>
+    <>
+      {isRichText && <ToolbarPlugin />}
+      <div
+        className={`editor-container ${showTreeView ? 'tree-view' : ''} ${
+          !isRichText ? 'plain-text' : ''
+        }`}
+        ref={scrollRef}>
+        {isMaxLength && <MaxLengthPlugin maxLength={30} />}
         <AutoFocusPlugin />
         <ClearEditorPlugin />
-        {hashtagsEnabled && <HashtagPlugin />}
-        {emojisEnabled && <EmojisPlugin />}
+        <ComponentPickerPlugin />
+        <AutoEmbedPlugin />
+        <MentionsPlugin />
+        <EmojisPlugin />
+        <HashtagPlugin />
         <KeywordsPlugin />
         <SpeechToTextPlugin />
-        {autoLinkEnabled && <AutoLinkPlugin />}
+        <AutoLinkPlugin />
         <AutoScrollPlugin scrollRef={scrollRef} />
-
-        <>
-          <RichTextPlugin
-            contentEditable={<ContentEditable />}
-            placeholder={placeholderComponent}
-          />
-          <OnChangePlugin
-            onChange={(editorState, editor: any) => {
-              editor.update(() => {
-                let payload: any = {};
-
-                const htmlString = $generateHtmlFromNodes(editor, null);
-                payload['html'] = htmlString;
-                payload['json'] = JSON.stringify(editor.getEditorState());
-                onChange?.(payload, JSON.stringify(editorState), activeEditor);
-              });
-
-              return (editorStateRef.current = editorState);
-            }}
-          />
-          <MarkdownShortcutPlugin />
-          <CodeHighlightPlugin />
-          <ListPlugin />
-          <CheckListPlugin />
-          <ListMaxIndentLevelPlugin maxDepth={listMaxIndent} />
-          <LinkPlugin />
-          <ClickableLinkPlugin />
-          <CharacterStylesPopupPlugin />
-          <TabFocusPlugin />
-        </>
-
-        <HistoryPlugin externalHistoryState={historyState} />
-        {actionsEnabled && <ActionsPlugin isRichText={isRichText} />}
+        <CommentPlugin
+          providerFactory={isCollab ? createWebsocketProvider : undefined}
+        />
+        {isRichText ? (
+          <>
+            {isCollab ? (
+              <CollaborationPlugin
+                id="main"
+                providerFactory={createWebsocketProvider}
+                shouldBootstrap={!skipCollaborationInit}
+              />
+            ) : (
+              <HistoryPlugin externalHistoryState={historyState} />
+            )}
+            <RichTextPlugin
+              contentEditable={
+                <div className="editor-scroller">
+                  <div className="editor" ref={onRef}>
+                    <ContentEditable />
+                  </div>
+                </div>
+              }
+              placeholder={placeholder}
+            />
+            <MarkdownShortcutPlugin />
+            <CodeHighlightPlugin />
+            <ListPlugin />
+            <CheckListPlugin />
+            <ListMaxIndentLevelPlugin maxDepth={7} />
+            <TablePlugin />
+            <TableCellResizer />
+            <NewTablePlugin cellEditorConfig={cellEditorConfig}>
+              <AutoFocusPlugin />
+              <RichTextPlugin
+                contentEditable={
+                  <ContentEditable className="TableNode__contentEditable" />
+                }
+                placeholder={''}
+              />
+              <MentionsPlugin />
+              <HistoryPlugin />
+              <ImagesPlugin captionsEnabled={false} />
+              <LinkPlugin />
+              <ClickableLinkPlugin />
+              <FloatingTextFormatToolbarPlugin />
+            </NewTablePlugin>
+            <ImagesPlugin />
+            <LinkPlugin />
+            <PollPlugin />
+            <TwitterPlugin />
+            <YouTubePlugin />
+            <FigmaPlugin />
+            <ClickableLinkPlugin />
+            <HorizontalRulePlugin />
+            <EquationsPlugin />
+            <ExcalidrawPlugin />
+            <TabFocusPlugin />
+            <CollapsiblePlugin />
+            {floatingAnchorElem && (
+              <>
+                <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+                <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
+                <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
+                <TableCellActionMenuPlugin anchorElem={floatingAnchorElem} />
+                <FloatingTextFormatToolbarPlugin
+                  anchorElem={floatingAnchorElem}
+                />
+              </>
+            )}
+          </>
+        ) : (
+          <>
+            <PlainTextPlugin
+              contentEditable={<ContentEditable />}
+              placeholder={placeholder}
+            />
+            <HistoryPlugin externalHistoryState={historyState} />
+          </>
+        )}
+        {(isCharLimit || isCharLimitUtf8) && (
+          <CharacterLimitPlugin charset={isCharLimit ? 'UTF-16' : 'UTF-8'} />
+        )}
+        {isAutocomplete && <AutocompletePlugin />}
+        <div>{showTableOfContents && <TableOfContentsPlugin />}</div>
+        <div className="toc">
+          {showTableOfContents && <TableOfContentsPlugin />}
+        </div>
+        <ActionsPlugin isRichText={isRichText} />
       </div>
-    </EditorContext.Provider>
+      {showTreeView && <TreeViewPlugin />}
+    </>
   );
-};
-
-export default Editor;
+}

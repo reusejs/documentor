@@ -6,7 +6,7 @@
  *
  */
 
-import type { Spread } from 'lexical';
+import type {Spread} from 'lexical';
 
 import {
   DecoratorNode,
@@ -16,8 +16,8 @@ import {
 } from 'lexical';
 import * as React from 'react';
 
-import { useSharedAutocompleteContext } from '../context/SharedAutocompleteContext';
-import { uuid as UUID } from '../plugins/AutocompletePlugin';
+import {useSharedAutocompleteContext} from '../context/SharedAutocompleteContext';
+import {uuid as UUID} from '../plugins/AutocompletePlugin';
 
 declare global {
   interface Navigator {
@@ -49,7 +49,7 @@ export class AutocompleteNode extends DecoratorNode<JSX.Element | null> {
   }
 
   static importJSON(
-    serializedNode: SerializedAutocompleteNode
+    serializedNode: SerializedAutocompleteNode,
   ): AutocompleteNode {
     const node = $createAutocompleteNode(serializedNode.uuid);
     return node;
@@ -72,7 +72,7 @@ export class AutocompleteNode extends DecoratorNode<JSX.Element | null> {
   updateDOM(
     prevNode: unknown,
     dom: HTMLElement,
-    config: EditorConfig
+    config: EditorConfig,
   ): boolean {
     return false;
   }
@@ -102,7 +102,7 @@ function AutocompleteComponent(): JSX.Element {
       : window.innerWidth <= 800 && window.innerHeight <= 600;
   // TODO Move to theme
   return (
-    <span style={{ color: '#ccc' }} spellCheck="false">
+    <span style={{color: '#ccc'}} spellCheck="false">
       {suggestion} {isMobile ? '(SWIPE \u2B95)' : '(TAB)'}
     </span>
   );

@@ -27,15 +27,9 @@ export type Comment = {
   id: string;
   timeStamp: number;
   type: 'comment';
-  quote?: string;
-  comments?: Array<Comment>;
 };
 
 export type Thread = {
-  author?: string;
-  content?: string;
-  deleted?: boolean;
-  timeStamp?: number;
   comments: Array<Comment>;
   id: string;
   quote: string;
