@@ -13,6 +13,9 @@ import type {
   NodeKey,
   SerializedEditor,
   SerializedLexicalNode,
+  DOMExportOutput,
+  DOMConversionMap,
+  DOMConversionOutput,
 } from 'lexical';
 
 import './ImageNode.css';
@@ -65,6 +68,15 @@ export interface ImagePayload {
   showCaption?: boolean;
   src: string;
   width?: number;
+}
+
+function convertImageElement(domNode: Node): null | DOMConversionOutput {
+  if (domNode instanceof HTMLImageElement) {
+    const { alt: altText, src } = domNode;
+    const node = $createImageNode({ altText, src });
+    return { node };
+  }
+  return null;
 }
 
 const imageCache = new Set();
@@ -366,6 +378,22 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
       nestedEditor.setEditorState(editorState);
     }
     return node;
+  }
+
+  exportDOM(): DOMExportOutput {
+    const element = document.createElement('img');
+    element.setAttribute('src', this.__src);
+    element.setAttribute('alt', this.__altText);
+    return { element };
+  }
+
+  static importDOM(): DOMConversionMap | null {
+    return {
+      img: (node: Node) => ({
+        conversion: convertImageElement,
+        priority: 0,
+      }),
+    };
   }
 
   constructor(
