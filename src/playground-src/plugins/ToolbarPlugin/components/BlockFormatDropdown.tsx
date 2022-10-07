@@ -14,9 +14,9 @@ import {
   LexicalEditor,
 } from 'lexical';
 import React, { useContext } from 'react';
-import EditorContext from '../../../context/EditorContext';
+import EditorContext from '../../../../context/EditorContext';
 import DropDown from '../../../ui/DropDown';
-import ToolbarContext from '../../../context/ToolbarContext';
+import ToolbarContext from '../../../../context/ToolbarContext';
 
 const blockTypeToBlockName = {
   bullet: 'Bulleted List',

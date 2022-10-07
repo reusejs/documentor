@@ -25,7 +25,7 @@ import TableCellResizer from '../../TableCellResizer';
 import { TablePlugin } from '@lexical/react/LexicalTablePlugin';
 import TableCellActionMenuPlugin from '../../TableActionMenuPlugin';
 import HorizontalRulePlugin from '../../HorizontalRulePlugin';
-import EditorContext from '../../../context/EditorContext';
+import EditorContext from '../../../../context/EditorContext';
 
 // Taken from https://stackoverflow.com/a/9102270
 const YOUTUBE_ID_PARSER =

@@ -6,12 +6,12 @@
  *
  */
 
-import type { LexicalEditor } from 'lexical';
+import type {LexicalEditor} from 'lexical';
 
-import { TOGGLE_CONNECT_COMMAND } from '@lexical/yjs';
-import { COMMAND_PRIORITY_EDITOR } from 'lexical';
-import { useEffect, useState } from 'react';
-import { WebsocketProvider } from 'y-websocket';
+import {TOGGLE_CONNECT_COMMAND} from '@lexical/yjs';
+import {COMMAND_PRIORITY_LOW} from 'lexical';
+import {useEffect, useState} from 'react';
+import {WebsocketProvider} from 'y-websocket';
 import {
   Array as YArray,
   Map as YMap,
@@ -50,7 +50,7 @@ export function createComment(
   author: string,
   id?: string,
   timeStamp?: number,
-  deleted?: boolean
+  deleted?: boolean,
 ): Comment {
   return {
     author,
@@ -65,7 +65,7 @@ export function createComment(
 export function createThread(
   quote: string,
   comments: Array<Comment>,
-  id?: string
+  id?: string,
 ): Thread {
   return {
     comments,
@@ -126,7 +126,7 @@ export class CommentStore {
   addComment(
     commentOrThread: Comment | Thread,
     thread?: Thread,
-    offset?: number
+    offset?: number,
   ): void {
     const nextComments = Array.from(this._comments);
     // The YJS types explicitly use `any` as well.
@@ -170,8 +170,8 @@ export class CommentStore {
 
   deleteCommentOrThread(
     commentOrThread: Comment | Thread,
-    thread?: Thread
-  ): { markedComment: Comment; index: number } | null {
+    thread?: Thread,
+  ): {markedComment: Comment; index: number} | null {
     const nextComments = Array.from(this._comments);
     // The YJS types explicitly use `any` as well.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -267,13 +267,11 @@ export class CommentStore {
     sharedMap.set('type', type);
     sharedMap.set('id', id);
     if (type === 'comment') {
-      commentOrThread = commentOrThread as Comment;
       sharedMap.set('author', commentOrThread.author);
       sharedMap.set('content', commentOrThread.content);
       sharedMap.set('deleted', commentOrThread.deleted);
       sharedMap.set('timeStamp', commentOrThread.timeStamp);
     } else {
-      commentOrThread = commentOrThread as Thread;
       sharedMap.set('quote', commentOrThread.quote);
       const commentsArray = new YArray();
       commentOrThread.comments.forEach((comment, i) => {
@@ -318,16 +316,16 @@ export class CommentStore {
           }
         }
 
-        return true;
+        return false;
       },
-      COMMAND_PRIORITY_EDITOR
+      COMMAND_PRIORITY_LOW,
     );
 
     const onSharedCommentChanges = (
       // The YJS types explicitly use `any` as well.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       events: Array<YEvent<any>>,
-      transaction: Transaction
+      transaction: Transaction,
     ) => {
       if (transaction.origin !== this) {
         for (let i = 0; i < events.length; i++) {
@@ -371,30 +369,30 @@ export class CommentStore {
                                 innerComment: Map<
                                   string,
                                   string | number | boolean
-                                >
+                                >,
                               ) =>
                                 createComment(
                                   innerComment.get('content') as string,
                                   innerComment.get('author') as string,
                                   innerComment.get('id') as string,
                                   innerComment.get('timeStamp') as number,
-                                  innerComment.get('deleted') as boolean
-                                )
+                                  innerComment.get('deleted') as boolean,
+                                ),
                             ),
-                          id
+                          id,
                         )
                       : createComment(
                           map.get('content'),
                           map.get('author'),
                           id,
                           map.get('timeStamp'),
-                          map.get('deleted')
+                          map.get('deleted'),
                         );
                   this._withLocalTransaction(() => {
                     this.addComment(
                       commentOrThread,
                       parentThread as Thread,
-                      offset
+                      offset,
                     );
                   });
                 });
@@ -403,13 +401,13 @@ export class CommentStore {
               } else if (typeof del === 'number') {
                 for (let d = 0; d < del; d++) {
                   const commentOrThread =
-                    parentThread === undefined // FIXME: commented out for ts error: || parentThread === false
+                    parentThread === undefined || parentThread === false
                       ? this._comments[offset]
                       : parentThread.comments[offset];
                   this._withLocalTransaction(() => {
                     this.deleteCommentOrThread(
                       commentOrThread,
-                      parentThread as Thread
+                      parentThread as Thread,
                     );
                   });
                   offset++;
@@ -439,7 +437,7 @@ export class CommentStore {
 
 export function useCommentStore(commentStore: CommentStore): Comments {
   const [comments, setComments] = useState<Comments>(
-    commentStore.getComments()
+    commentStore.getComments(),
   );
 
   useEffect(() => {

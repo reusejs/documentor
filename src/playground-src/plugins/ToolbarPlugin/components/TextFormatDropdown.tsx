@@ -1,8 +1,8 @@
 import { FORMAT_TEXT_COMMAND } from 'lexical';
 import React, { useContext } from 'react';
 import DropDown from '../../../ui/DropDown';
-import EditorContext from '../../../context/EditorContext';
-import ToolbarContext from '../../../context/ToolbarContext';
+import EditorContext from '../../../../context/EditorContext';
+import ToolbarContext from '../../../../context/ToolbarContext';
 
 const TextFormatDropdown = () => {
   const { activeEditor } = useContext(EditorContext);

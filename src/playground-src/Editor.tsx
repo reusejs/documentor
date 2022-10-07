@@ -35,7 +35,7 @@ import ContentEditable from './ui/ContentEditable';
 import Placeholder from './ui/Placeholder';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import EditorContext from './context/EditorContext';
+import EditorContext from '../context/EditorContext';
 import { LexicalEditor } from 'lexical';
 import { $generateHtmlFromNodes } from '@lexical/html';
 

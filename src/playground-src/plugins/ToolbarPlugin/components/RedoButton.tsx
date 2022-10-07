@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useContext } from 'react';
-import ToolbarContext from '../../../context/ToolbarContext';
+import ToolbarContext from '../../../../context/ToolbarContext';
 import { REDO_COMMAND } from 'lexical';
-import EditorContext from '../../../context/EditorContext';
+import EditorContext from '../../../../context/EditorContext';
 import { IS_APPLE } from '../../../../shared/src/environment';
 
 const RedoButton = () => {

@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react';
-import ToolbarContext from '../../../context/ToolbarContext';
+import ToolbarContext from '../../../../context/ToolbarContext';
 import ColorPicker from '../../../ui/ColorPicker';
 
 const BackgroundColorPicker = () => {

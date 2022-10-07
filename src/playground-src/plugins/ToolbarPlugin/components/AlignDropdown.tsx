@@ -7,8 +7,8 @@ import {
   LexicalEditor,
   OUTDENT_CONTENT_COMMAND,
 } from 'lexical';
-import EditorContext from '../../../context/EditorContext';
-import ToolbarContext from '../../../context/ToolbarContext';
+import EditorContext from '../../../../context/EditorContext';
+import ToolbarContext from '../../../../context/ToolbarContext';
 
 function Divider(): JSX.Element {
   return <div className="divider" />;

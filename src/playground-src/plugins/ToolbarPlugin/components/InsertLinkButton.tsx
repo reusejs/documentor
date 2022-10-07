@@ -1,7 +1,7 @@
 import React from 'react';
 import { useContext } from 'react';
-import EditorContext from '../../../context/EditorContext';
-import ToolbarContext from '../../../context/ToolbarContext';
+import EditorContext from '../../../../context/EditorContext';
+import ToolbarContext from '../../../../context/ToolbarContext';
 import FloatingLinkEditor from './FloatingLinkEditor';
 import { createPortal } from 'react-dom';
 
