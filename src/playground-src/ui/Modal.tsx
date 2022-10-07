@@ -9,8 +9,8 @@
 import './Modal.css';
 
 import * as React from 'react';
-import { useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
+import {ReactNode, useEffect, useRef} from 'react';
+import {createPortal} from 'react-dom';
 
 function PortalImpl({
   onClose,
@@ -18,12 +18,12 @@ function PortalImpl({
   title,
   closeOnClickOutside,
 }: {
-  children: JSX.Element | string | (JSX.Element | string)[];
+  children: ReactNode;
   closeOnClickOutside: boolean;
   onClose: () => void;
   title: string;
 }) {
-  const modalRef = useRef<HTMLDivElement>();
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (modalRef.current !== null) {
@@ -32,8 +32,8 @@ function PortalImpl({
   }, []);
 
   useEffect(() => {
-    let modalOverlayElement = null;
-    const handler = (event) => {
+    let modalOverlayElement: HTMLElement | null = null;
+    const handler = (event: KeyboardEvent) => {
       if (event.keyCode === 27) {
         onClose();
       }
@@ -73,8 +73,7 @@ function PortalImpl({
           className="Modal__closeButton"
           aria-label="Close modal"
           type="button"
-          onClick={onClose}
-        >
+          onClick={onClose}>
           X
         </button>
         <div className="Modal__content">{children}</div>
@@ -89,7 +88,7 @@ export default function Modal({
   title,
   closeOnClickOutside = false,
 }: {
-  children: JSX.Element | string | (JSX.Element | string)[];
+  children: ReactNode;
   closeOnClickOutside?: boolean;
   onClose: () => void;
   title: string;
@@ -98,10 +97,9 @@ export default function Modal({
     <PortalImpl
       onClose={onClose}
       title={title}
-      closeOnClickOutside={closeOnClickOutside}
-    >
+      closeOnClickOutside={closeOnClickOutside}>
       {children}
     </PortalImpl>,
-    document.body
+    document.body,
   );
 }

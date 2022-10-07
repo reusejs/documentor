@@ -7,10 +7,10 @@
  */
 
 import * as React from 'react';
-import { useMemo, useState } from 'react';
+import {useMemo, useState} from 'react';
 
-import { isDevPlayground } from './appSettings';
-import { useSettings } from './context/SettingsContext';
+import {isDevPlayground} from './appSettings';
+import {useSettings} from './context/SettingsContext';
 import Switch from './ui/Switch';
 
 export default function Settings(): JSX.Element {
@@ -21,12 +21,14 @@ export default function Settings(): JSX.Element {
       measureTypingPerf,
       isCollab,
       isRichText,
+      isMaxLength,
       isCharLimit,
       isCharLimitUtf8,
       isAutocomplete,
-      // showTreeView,
+      showTreeView,
       showNestedEditorTreeView,
       disableBeforeInput,
+      showTableOfContents,
     },
   } = useSettings();
   const [showSettings, setShowSettings] = useState(false);
@@ -75,11 +77,11 @@ export default function Settings(): JSX.Element {
             checked={measureTypingPerf}
             text="Measure Perf"
           />
-          {/* <Switch
+          <Switch
             onClick={() => setOption('showTreeView', !showTreeView)}
             checked={showTreeView}
             text="Debug View"
-          /> */}
+          />
           <Switch
             onClick={() =>
               setOption('showNestedEditorTreeView', !showNestedEditorTreeView)
@@ -106,6 +108,11 @@ export default function Settings(): JSX.Element {
             text="Char Limit (UTF-8)"
           />
           <Switch
+            onClick={() => setOption('isMaxLength', !isMaxLength)}
+            checked={isMaxLength}
+            text="Max Length"
+          />
+          <Switch
             onClick={() => setOption('isAutocomplete', !isAutocomplete)}
             checked={isAutocomplete}
             text="Autocomplete"
@@ -117,6 +124,13 @@ export default function Settings(): JSX.Element {
             }}
             checked={disableBeforeInput}
             text="Legacy Events"
+          />
+          <Switch
+            onClick={() => {
+              setOption('showTableOfContents', !showTableOfContents);
+            }}
+            checked={showTableOfContents}
+            text="Table Of Contents"
           />
         </div>
       ) : null}

@@ -9,13 +9,13 @@
 import './EquationEditor.css';
 
 import * as React from 'react';
-import { ChangeEvent, RefObject } from 'react';
+import {ChangeEvent, RefObject} from 'react';
 
 type BaseEquationEditorProps = {
   equation: string;
   inline: boolean;
-  inputRef: { current: null | HTMLInputElement | HTMLTextAreaElement };
-  setEquation: (string) => void;
+  inputRef: {current: null | HTMLInputElement | HTMLTextAreaElement};
+  setEquation: (equation: string) => void;
 };
 
 export default function EquationEditor({
@@ -24,8 +24,8 @@ export default function EquationEditor({
   inline,
   inputRef,
 }: BaseEquationEditorProps): JSX.Element {
-  const onChange = (event) => {
-    setEquation(event.target.value);
+  const onChange = (event: ChangeEvent) => {
+    setEquation((event.target as HTMLInputElement).value);
   };
 
   const props = {
@@ -49,7 +49,7 @@ export default function EquationEditor({
 
 type EquationEditorImplProps = {
   equation: string;
-  inputRef: { current: null | HTMLInputElement };
+  inputRef: {current: null | HTMLInputElement};
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -75,7 +75,7 @@ function InlineEquationEditor({
 
 type BlockEquationEditorImplProps = {
   equation: string;
-  inputRef: { current: null | HTMLTextAreaElement };
+  inputRef: {current: null | HTMLTextAreaElement};
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 };
 

@@ -9,10 +9,17 @@
 import './LinkPreview.css';
 
 import * as React from 'react';
-import { Suspense } from 'react';
+import {CSSProperties, Suspense} from 'react';
+
+type Preview = {
+  title: string;
+  description: string;
+  img: string;
+  domain: string;
+} | null;
 
 // Cached responses or running request promises
-const PREVIEW_CACHE = {};
+const PREVIEW_CACHE: Record<string, Promise<Preview> | {preview: Preview}> = {};
 
 const URL_MATCHER =
   /((https?:\/\/(www\.)?)|(www\.))[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
@@ -21,12 +28,12 @@ function useSuspenseRequest(url: string) {
   let cached = PREVIEW_CACHE[url];
 
   if (!url.match(URL_MATCHER)) {
-    return { preview: null };
+    return {preview: null};
   }
 
   if (!cached) {
     cached = PREVIEW_CACHE[url] = fetch(
-      `/api/link-preview?url=${encodeURI(url)}`
+      `/api/link-preview?url=${encodeURI(url)}`,
     )
       .then((response) => response.json())
       .then((preview) => {
@@ -34,7 +41,7 @@ function useSuspenseRequest(url: string) {
         return preview;
       })
       .catch(() => {
-        PREVIEW_CACHE[url] = { preview: null };
+        PREVIEW_CACHE[url] = {preview: null};
       });
   }
 
@@ -49,8 +56,8 @@ function LinkPreviewContent({
   url,
 }: Readonly<{
   url: string;
-}>): JSX.Element {
-  const { preview } = useSuspenseRequest(url);
+}>): JSX.Element | null {
+  const {preview} = useSuspenseRequest(url);
   if (preview === null) {
     return null;
   }
@@ -78,13 +85,13 @@ function LinkPreviewContent({
   );
 }
 
-function Glimmer(props): JSX.Element {
+function Glimmer(props: {style: CSSProperties; index: number}): JSX.Element {
   return (
     <div
       className="LinkPreview__glimmer"
       {...props}
       style={{
-        animationDelay: (props.index || 0) * 300,
+        animationDelay: String((props.index || 0) * 300),
         ...(props.style || {}),
       }}
     />
@@ -100,12 +107,11 @@ export default function LinkPreview({
     <Suspense
       fallback={
         <>
-          <Glimmer style={{ height: '80px' }} index={0} />
-          <Glimmer style={{ width: '60%' }} index={1} />
-          <Glimmer style={{ width: '80%' }} index={2} />
+          <Glimmer style={{height: '80px'}} index={0} />
+          <Glimmer style={{width: '60%'}} index={1} />
+          <Glimmer style={{width: '80%'}} index={2} />
         </>
-      }
-    >
+      }>
       <LinkPreviewContent url={url} />
     </Suspense>
   );

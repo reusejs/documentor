@@ -12,11 +12,13 @@ export type SettingName =
   | 'isRichText'
   | 'isCollab'
   | 'isCharLimit'
+  | 'isMaxLength'
   | 'isCharLimitUtf8'
   | 'isAutocomplete'
   | 'showTreeView'
   | 'showNestedEditorTreeView'
-  | 'emptyEditor';
+  | 'emptyEditor'
+  | 'showTableOfContents';
 
 export type Settings = Record<SettingName, boolean>;
 
@@ -25,8 +27,6 @@ export const isDevPlayground: boolean =
   hostName !== 'playground.lexical.dev' &&
   hostName !== 'lexical-playground.vercel.app';
 
-// export const isDevPlayground: boolean = true;
-
 export const DEFAULT_SETTINGS: Settings = {
   disableBeforeInput: false,
   emptyEditor: isDevPlayground,
@@ -34,8 +34,10 @@ export const DEFAULT_SETTINGS: Settings = {
   isCharLimit: false,
   isCharLimitUtf8: false,
   isCollab: false,
+  isMaxLength: false,
   isRichText: true,
   measureTypingPerf: false,
   showNestedEditorTreeView: false,
+  showTableOfContents: false,
   showTreeView: true,
 };

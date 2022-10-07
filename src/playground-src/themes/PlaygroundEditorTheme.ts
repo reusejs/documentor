@@ -6,7 +6,7 @@
  *
  */
 
-import type { EditorThemeClasses } from 'lexical';
+import type {EditorThemeClasses} from 'lexical';
 
 import './PlaygroundEditorTheme.css';
 
@@ -45,6 +45,10 @@ const theme: EditorThemeClasses = {
     url: 'PlaygroundEditorTheme__tokenOperator',
     variable: 'PlaygroundEditorTheme__tokenVariable',
   },
+  embedBlock: {
+    base: 'PlaygroundEditorTheme__embedBlock',
+    focus: 'PlaygroundEditorTheme__embedBlockFocus',
+  },
   hashtag: 'PlaygroundEditorTheme__hashtag',
   heading: {
     h1: 'PlaygroundEditorTheme__h1',
@@ -52,6 +56,7 @@ const theme: EditorThemeClasses = {
     h3: 'PlaygroundEditorTheme__h3',
     h4: 'PlaygroundEditorTheme__h4',
     h5: 'PlaygroundEditorTheme__h5',
+    h6: 'PlaygroundEditorTheme__h6',
   },
   image: 'editor-image',
   link: 'PlaygroundEditorTheme__link',
@@ -78,8 +83,20 @@ const theme: EditorThemeClasses = {
   quote: 'PlaygroundEditorTheme__quote',
   rtl: 'PlaygroundEditorTheme__rtl',
   table: 'PlaygroundEditorTheme__table',
+  tableAddColumns: 'PlaygroundEditorTheme__tableAddColumns',
+  tableAddRows: 'PlaygroundEditorTheme__tableAddRows',
   tableCell: 'PlaygroundEditorTheme__tableCell',
+  tableCellActionButton: 'PlaygroundEditorTheme__tableCellActionButton',
+  tableCellActionButtonContainer:
+    'PlaygroundEditorTheme__tableCellActionButtonContainer',
+  tableCellEditing: 'PlaygroundEditorTheme__tableCellEditing',
   tableCellHeader: 'PlaygroundEditorTheme__tableCellHeader',
+  tableCellPrimarySelected: 'PlaygroundEditorTheme__tableCellPrimarySelected',
+  tableCellResizer: 'PlaygroundEditorTheme__tableCellResizer',
+  tableCellSelected: 'PlaygroundEditorTheme__tableCellSelected',
+  tableCellSortedIndicator: 'PlaygroundEditorTheme__tableCellSortedIndicator',
+  tableResizeRuler: 'PlaygroundEditorTheme__tableCellResizeRuler',
+  tableSelected: 'PlaygroundEditorTheme__tableSelected',
   text: {
     bold: 'PlaygroundEditorTheme__textBold',
     code: 'PlaygroundEditorTheme__textCode',
