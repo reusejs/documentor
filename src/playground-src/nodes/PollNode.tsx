@@ -6,34 +6,31 @@
  *
  */
 
-import type {
+import {
+  DecoratorNode,
   DOMConversionMap,
   DOMConversionOutput,
   DOMExportOutput,
   LexicalNode,
   NodeKey,
   SerializedLexicalNode,
+  Spread,
 } from 'lexical';
-
-import './PollNode.css';
-
-import { useCollaborationContext } from '@lexical/react/LexicalCollaborationContext';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $getNodeByKey, DecoratorNode } from 'lexical';
-import { Spread } from 'libdefs/globals';
 import * as React from 'react';
-import { useMemo, useRef } from 'react';
+import {Suspense} from 'react';
 
-import Button from '../ui/Button';
-import joinClasses from '../utils/join-classes';
+export type Options = ReadonlyArray<Option>;
 
-type Options = ReadonlyArray<Option>;
-
-type Option = Readonly<{
+export type Option = Readonly<{
   text: string;
   uid: string;
   votes: Array<number>;
 }>;
+
+const PollComponent = React.lazy(
+  // @ts-ignore
+  () => import('./PollComponent'),
+);
 
 function createUID(): string {
   return Math.random()
@@ -42,7 +39,7 @@ function createUID(): string {
     .substr(0, 5);
 }
 
-function createPollOption(text = ''): Option {
+export function createPollOption(text = ''): Option {
   return {
     text,
     uid: createUID(),
@@ -53,149 +50,13 @@ function createPollOption(text = ''): Option {
 function cloneOption(
   option: Option,
   text: string,
-  votes?: Array<number>
+  votes?: Array<number>,
 ): Option {
   return {
     text,
     uid: option.uid,
     votes: votes || Array.from(option.votes),
   };
-}
-
-function getTotalVotes(options: Options): number {
-  return options.reduce((totalVotes, next) => {
-    return totalVotes + next.votes.length;
-  }, 0);
-}
-
-function PollOptionComponent({
-  option,
-  index,
-  options,
-  totalVotes,
-  withPollNode,
-}: {
-  index: number;
-  option: Option;
-  options: Options;
-  totalVotes: number;
-  withPollNode: (cb: (PollNode) => void) => void;
-}): JSX.Element {
-  const { clientID } = useCollaborationContext();
-  const checkboxRef = useRef(null);
-  const votesArray = option.votes;
-  const checkedIndex = votesArray.indexOf(clientID);
-  const checked = checkedIndex !== -1;
-  const votes = votesArray.length;
-  const text = option.text;
-
-  return (
-    <div className="PollNode__optionContainer">
-      <div
-        className={joinClasses(
-          'PollNode__optionCheckboxWrapper',
-          checked && 'PollNode__optionCheckboxChecked'
-        )}
-      >
-        <input
-          ref={checkboxRef}
-          className="PollNode__optionCheckbox"
-          type="checkbox"
-          onChange={(e) => {
-            withPollNode((node) => {
-              node.toggleVote(option, clientID);
-            });
-          }}
-          checked={checked}
-        />
-      </div>
-      <div className="PollNode__optionInputWrapper">
-        <div
-          className="PollNode__optionInputVotes"
-          style={{ width: `${votes === 0 ? 0 : (votes / totalVotes) * 100}%` }}
-        />
-        <span className="PollNode__optionInputVotesCount">
-          {votes > 0 && (votes === 1 ? '1 vote' : `${votes} votes`)}
-        </span>
-        <input
-          className="PollNode__optionInput"
-          type="text"
-          value={text}
-          onChange={(e) => {
-            withPollNode((node) => {
-              node.setOptionText(option, e.target.value);
-            });
-          }}
-          placeholder={`Option ${index + 1}`}
-        />
-      </div>
-      <button
-        disabled={options.length < 3}
-        className={joinClasses(
-          'PollNode__optionDelete',
-          options.length < 3 && 'PollNode__optionDeleteDisabled'
-        )}
-        arial-label="Remove"
-        onClick={() => {
-          withPollNode((node) => {
-            node.deleteOption(option);
-          });
-        }}
-      />
-    </div>
-  );
-}
-
-function PollComponent({
-  question,
-  options,
-  nodeKey,
-}: {
-  nodeKey: NodeKey;
-  options: Options;
-  question: string;
-}): JSX.Element {
-  const [editor] = useLexicalComposerContext();
-  const totalVotes = useMemo(() => getTotalVotes(options), [options]);
-
-  const withPollNode = (cb: (node: PollNode) => void): void => {
-    editor.update(() => {
-      const node = $getNodeByKey(nodeKey);
-      if ($isPollNode(node)) {
-        cb(node);
-      }
-    });
-  };
-
-  const addOption = () => {
-    withPollNode((node) => {
-      node.addOption(createPollOption());
-    });
-  };
-
-  return (
-    <div className="PollNode__container">
-      <h2 className="PollNode__heading">{question}</h2>
-      {options.map((option, index) => {
-        const key = option.uid;
-        return (
-          <PollOptionComponent
-            key={key}
-            withPollNode={withPollNode}
-            option={option}
-            index={index}
-            options={options}
-            totalVotes={totalVotes}
-          />
-        );
-      })}
-      <div className="PollNode__footer">
-        <Button onClick={addOption} small={true}>
-          Add Option
-        </Button>
-      </div>
-    </div>
-  );
 }
 
 export type SerializedPollNode = Spread<
@@ -208,10 +69,13 @@ export type SerializedPollNode = Spread<
   SerializedLexicalNode
 >;
 
-function convertPollElement(domNode: HTMLElement): DOMConversionOutput {
+function convertPollElement(domNode: HTMLElement): DOMConversionOutput | null {
   const question = domNode.getAttribute('data-lexical-poll-question');
-  const node = $createPollNode(question);
-  return { node };
+  if (question !== null) {
+    const node = $createPollNode(question);
+    return {node};
+  }
+  return null;
 }
 
 export class PollNode extends DecoratorNode<JSX.Element> {
@@ -305,7 +169,7 @@ export class PollNode extends DecoratorNode<JSX.Element> {
   exportDOM(): DOMExportOutput {
     const element = document.createElement('span');
     element.setAttribute('data-lexical-poll-question', this.__question);
-    return { element };
+    return {element};
   }
 
   createDOM(): HTMLElement {
@@ -320,11 +184,13 @@ export class PollNode extends DecoratorNode<JSX.Element> {
 
   decorate(): JSX.Element {
     return (
-      <PollComponent
-        question={this.__question}
-        options={this.__options}
-        nodeKey={this.__key}
-      />
+      <Suspense fallback={null}>
+        <PollComponent
+          question={this.__question}
+          options={this.__options}
+          nodeKey={this.__key}
+        />
+      </Suspense>
     );
   }
 }
@@ -334,7 +200,7 @@ export function $createPollNode(question: string): PollNode {
 }
 
 export function $isPollNode(
-  node: LexicalNode | null | undefined
+  node: LexicalNode | null | undefined,
 ): node is PollNode {
   return node instanceof PollNode;
 }

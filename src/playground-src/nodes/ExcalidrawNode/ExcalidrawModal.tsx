@@ -9,14 +9,12 @@
 import './ExcalidrawModal.css';
 
 import Excalidraw from '@excalidraw/excalidraw';
-import _default from '@excalidraw/excalidraw';
 import * as React from 'react';
-import { ReactPortal, useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import {ReactPortal, useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {createPortal} from 'react-dom';
 
 import Button from '../../ui/Button';
 import Modal from '../../ui/Modal';
-import { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types';
 
 export type ExcalidrawElementFragment = {
   isDeleted?: boolean;
@@ -35,11 +33,7 @@ type Props = {
   /**
    * Completely remove Excalidraw component
    */
-  onDelete: () => boolean;
-  /**
-   * Handle modal closing
-   */
-  onHide: () => void;
+  onDelete: () => void;
   /**
    * Callback when the save button is clicked
    */
@@ -56,11 +50,10 @@ export default function ExcalidrawModal({
   onSave,
   initialElements,
   isShown = false,
-  onHide,
   onDelete,
 }: Props): ReactPortal | null {
-  const excalidrawRef = useRef(null);
-  const excaliDrawModelRef = useRef(null);
+  const excaliDrawModelRef = useRef<HTMLDivElement | null>(null);
+
   const [discardModalOpen, setDiscardModalOpen] = useState(false);
   const [elements, setElements] =
     useState<ReadonlyArray<ExcalidrawElementFragment>>(initialElements);
@@ -72,17 +65,19 @@ export default function ExcalidrawModal({
   }, []);
 
   useEffect(() => {
-    let modalOverlayElement = null;
+    let modalOverlayElement: HTMLElement | null = null;
+
     const clickOutsideHandler = (event: MouseEvent) => {
       const target = event.target;
       if (
         excaliDrawModelRef.current !== null &&
-        !excaliDrawModelRef.current.contains(target) &&
+        !excaliDrawModelRef.current.contains(target as Node) &&
         closeOnClickOutside
       ) {
         onDelete();
       }
     };
+
     if (excaliDrawModelRef.current !== null) {
       modalOverlayElement = excaliDrawModelRef.current?.parentElement;
       if (modalOverlayElement !== null) {
@@ -97,6 +92,24 @@ export default function ExcalidrawModal({
     };
   }, [closeOnClickOutside, onDelete]);
 
+  useLayoutEffect(() => {
+    const currentModalRef = excaliDrawModelRef.current;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      onDelete();
+    };
+
+    if (currentModalRef !== null) {
+      currentModalRef.addEventListener('keydown', onKeyDown);
+    }
+
+    return () => {
+      if (currentModalRef !== null) {
+        currentModalRef.removeEventListener('keydown', onKeyDown);
+      }
+    };
+  }, [elements, onDelete]);
+
   const save = () => {
     if (elements.filter((el) => !el.isDeleted).length > 0) {
       onSave(elements);
@@ -104,7 +117,6 @@ export default function ExcalidrawModal({
       // delete node if the scene is clear
       onDelete();
     }
-    onHide();
   };
 
   const discard = () => {
@@ -124,23 +136,20 @@ export default function ExcalidrawModal({
         onClose={() => {
           setDiscardModalOpen(false);
         }}
-        closeOnClickOutside={true}
-      >
+        closeOnClickOutside={true}>
         Are you sure you want to discard the changes?
         <div className="ExcalidrawModal__discardModal">
           <Button
             onClick={() => {
               setDiscardModalOpen(false);
-              onHide();
-            }}
-          >
+              onDelete();
+            }}>
             Discard
           </Button>{' '}
           <Button
             onClick={() => {
               setDiscardModalOpen(false);
-            }}
-          >
+            }}>
             Cancel
           </Button>
         </div>
@@ -148,37 +157,33 @@ export default function ExcalidrawModal({
     );
   }
 
-  useEffect(() => {
-    excalidrawRef?.current?.updateScene({ elements: initialElements });
-  }, [initialElements]);
-
   if (isShown === false) {
     return null;
   }
 
-  const onChange = (els) => {
+  const onChange = (els: ReadonlyArray<ExcalidrawElementFragment>) => {
     setElements(els);
   };
 
   // This is a hacky work-around for Excalidraw + Vite.
   // In DEV, Vite pulls this in fine, in prod it doesn't. It seems
   // like a module resolution issue with ESM vs CJS?
-  const _Excalidraw = Excalidraw.$$typeof != null ? Excalidraw : _default;
+  const _Excalidraw =
+    Excalidraw.$$typeof != null ? Excalidraw : Excalidraw.default;
 
   return createPortal(
     <div className="ExcalidrawModal__overlay" role="dialog">
       <div
         className="ExcalidrawModal__modal"
         ref={excaliDrawModelRef}
-        tabIndex={-1}
-      >
+        tabIndex={-1}>
         <div className="ExcalidrawModal__row">
           {discardModalOpen && <ShowDiscardDialog />}
           <_Excalidraw
             onChange={onChange}
             initialData={{
-              appState: { isLoading: false },
-              elements: initialElements as ExcalidrawElement[],
+              appState: {isLoading: false},
+              elements: initialElements,
             }}
           />
           <div className="ExcalidrawModal__actions">
@@ -192,6 +197,6 @@ export default function ExcalidrawModal({
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

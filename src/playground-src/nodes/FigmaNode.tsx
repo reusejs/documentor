@@ -22,22 +22,22 @@ import {
 } from '@lexical/react/LexicalDecoratorBlockNode';
 import * as React from 'react';
 
-type YouTubeComponentProps = Readonly<{
+type FigmaComponentProps = Readonly<{
   className: Readonly<{
     base: string;
     focus: string;
   }>;
   format: ElementFormatType | null;
   nodeKey: NodeKey;
-  videoID: string;
+  documentID: string;
 }>;
 
-function YouTubeComponent({
+function FigmaComponent({
   className,
   format,
   nodeKey,
-  videoID,
-}: YouTubeComponentProps) {
+  documentID,
+}: FigmaComponentProps) {
   return (
     <BlockWithAlignableContents
       className={className}
@@ -46,48 +46,46 @@ function YouTubeComponent({
       <iframe
         width="560"
         height="315"
-        src={`https://www.youtube.com/embed/${videoID}`}
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        src={`https://www.figma.com/embed?embed_host=lexical&url=\
+        https://www.figma.com/file/${documentID}`}
         allowFullScreen={true}
-        title="YouTube video"
       />
     </BlockWithAlignableContents>
   );
 }
 
-export type SerializedYouTubeNode = Spread<
+export type SerializedFigmaNode = Spread<
   {
-    videoID: string;
-    type: 'youtube';
+    documentID: string;
+    type: 'figma';
     version: 1;
   },
   SerializedDecoratorBlockNode
 >;
 
-export class YouTubeNode extends DecoratorBlockNode {
+export class FigmaNode extends DecoratorBlockNode {
   __id: string;
 
   static getType(): string {
-    return 'youtube';
+    return 'figma';
   }
 
-  static clone(node: YouTubeNode): YouTubeNode {
-    return new YouTubeNode(node.__id, node.__format, node.__key);
+  static clone(node: FigmaNode): FigmaNode {
+    return new FigmaNode(node.__id, node.__format, node.__key);
   }
 
-  static importJSON(serializedNode: SerializedYouTubeNode): YouTubeNode {
-    const node = $createYouTubeNode(serializedNode.videoID);
+  static importJSON(serializedNode: SerializedFigmaNode): FigmaNode {
+    const node = $createFigmaNode(serializedNode.documentID);
     node.setFormat(serializedNode.format);
     return node;
   }
 
-  exportJSON(): SerializedYouTubeNode {
+  exportJSON(): SerializedFigmaNode {
     return {
       ...super.exportJSON(),
-      type: 'youtube',
+      documentID: this.__id,
+      type: 'figma',
       version: 1,
-      videoID: this.__id,
     };
   }
 
@@ -108,7 +106,7 @@ export class YouTubeNode extends DecoratorBlockNode {
     _includeInert?: boolean | undefined,
     _includeDirectionless?: false | undefined,
   ): string {
-    return `https://www.youtube.com/watch?v=${this.__id}`;
+    return `https://www.figma.com/file/${this.__id}`;
   }
 
   decorate(_editor: LexicalEditor, config: EditorConfig): JSX.Element {
@@ -118,11 +116,11 @@ export class YouTubeNode extends DecoratorBlockNode {
       focus: embedBlockTheme.focus || '',
     };
     return (
-      <YouTubeComponent
+      <FigmaComponent
         className={className}
         format={this.__format}
         nodeKey={this.getKey()}
-        videoID={this.__id}
+        documentID={this.__id}
       />
     );
   }
@@ -132,12 +130,12 @@ export class YouTubeNode extends DecoratorBlockNode {
   }
 }
 
-export function $createYouTubeNode(videoID: string): YouTubeNode {
-  return new YouTubeNode(videoID);
+export function $createFigmaNode(documentID: string): FigmaNode {
+  return new FigmaNode(documentID);
 }
 
-export function $isYouTubeNode(
-  node: YouTubeNode | LexicalNode | null | undefined,
-): node is YouTubeNode {
-  return node instanceof YouTubeNode;
+export function $isFigmaNode(
+  node: FigmaNode | LexicalNode | null | undefined,
+): node is FigmaNode {
+  return node instanceof FigmaNode;
 }

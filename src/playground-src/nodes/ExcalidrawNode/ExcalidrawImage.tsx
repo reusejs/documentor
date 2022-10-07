@@ -6,14 +6,14 @@
  *
  */
 
-import { exportToSvg } from '@excalidraw/excalidraw';
+import {exportToSvg} from '@excalidraw/excalidraw';
 import {
   ExcalidrawElement,
   NonDeleted,
 } from '@excalidraw/excalidraw/types/element/types';
-import { AppState } from '@excalidraw/excalidraw/types/types';
+import {AppState} from '@excalidraw/excalidraw/types/types';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 
 type ImageType = 'svg' | 'canvas';
 
@@ -37,7 +37,7 @@ type Props = {
   /**
    * The ref object to be used to render the image
    */
-  imageContainerRef: { current: null | HTMLDivElement };
+  imageContainerRef: {current: null | HTMLDivElement};
   /**
    * The type of image to be rendered
    */
@@ -54,16 +54,16 @@ type Props = {
 
 // exportToSvg has fonts from excalidraw.com
 // We don't want them to be used in open source
-const removeStyleFromSvg_HACK = (svg) => {
+const removeStyleFromSvg_HACK = (svg: SVGElement) => {
   const styleTag = svg?.firstElementChild?.firstElementChild;
 
   // Generated SVG is getting double-sized by height and width attributes
   // We want to match the real size of the SVG element
   const viewBox = svg.getAttribute('viewBox');
   if (viewBox != null) {
-    const viewBoxDimentions = viewBox.split(' ');
-    svg.setAttribute('width', viewBoxDimentions[2]);
-    svg.setAttribute('height', viewBoxDimentions[3]);
+    const viewBoxDimensions = viewBox.split(' ');
+    svg.setAttribute('width', viewBoxDimensions[2]);
+    svg.setAttribute('height', viewBoxDimensions[3]);
   }
 
   if (styleTag && styleTag.tagName === 'style') {
@@ -81,12 +81,11 @@ export default function ExcalidrawImage({
   appState = null,
   rootClassName = null,
 }: Props): JSX.Element {
-  const [Svg, setSvg] = useState<Element | null>(null);
+  const [Svg, setSvg] = useState<SVGElement | null>(null);
 
   useEffect(() => {
     const setContent = async () => {
-      const svg: Element = await exportToSvg({
-        appState,
+      const svg: SVGElement = await exportToSvg({
         elements,
         files: null,
       });
@@ -105,7 +104,7 @@ export default function ExcalidrawImage({
     <div
       ref={imageContainerRef}
       className={rootClassName ?? ''}
-      dangerouslySetInnerHTML={{ __html: Svg?.outerHTML ?? '' }}
+      dangerouslySetInnerHTML={{__html: Svg?.outerHTML ?? ''}}
     />
   );
 }
