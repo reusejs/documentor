@@ -30,7 +30,7 @@ import {
 } from 'react';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
-import useLayoutEffect from '../shared/src/useLayoutEffect';
+import useLayoutEffect from '../../shared/src/useLayoutEffect';
 
 import { $createMentionNode, MentionNode } from '../nodes/MentionNode';
 

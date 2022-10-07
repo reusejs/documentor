@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { EditorComposer, Editor, Divider } from '../src';
-import ToolbarPlugin from '../src/plugins/ToolbarPlugin/ToolbarPlugin';
+import ToolbarPlugin from '../src/playground-src/plugins/ToolbarPlugin/ToolbarPlugin';
 
 import {
   AlignDropdown,
@@ -20,7 +20,7 @@ import {
   TextFormatDropdown,
   UnderlineButton,
   UndoButton,
-} from '../src/plugins/ToolbarPlugin/components';
+} from '../src/playground-src/plugins/ToolbarPlugin/components';
 
 export default {
   title: 'Minimal',

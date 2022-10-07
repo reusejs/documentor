@@ -1,7 +1,7 @@
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import React, { useState } from 'react';
-import PlaygroundNodes from './nodes/PlaygroundNodes';
-import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
+import PlaygroundNodes from './playground-src/nodes/PlaygroundNodes';
+import PlaygroundEditorTheme from './playground-src/themes/PlaygroundEditorTheme';
 import './EditorComposer.css';
 
 interface IEditorComposer {

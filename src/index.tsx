@@ -1,6 +1,6 @@
 import EditorComposer from './EditorComposer';
-import Editor from './Editor';
-import ToolbarPlugin from './plugins/ToolbarPlugin/ToolbarPlugin';
+import Editor from './playground-src/Editor';
+import ToolbarPlugin from './playground-src/plugins/ToolbarPlugin/ToolbarPlugin';
 
 import {
   AlignDropdown,
@@ -20,10 +20,10 @@ import {
   TextFormatDropdown,
   UnderlineButton,
   UndoButton,
-} from './plugins/ToolbarPlugin/components';
+} from './playground-src/plugins/ToolbarPlugin/components';
 
 import * as ToolbarTypes from './types';
-import Divider from './ui/Divider';
+import Divider from './playground-src/ui/Divider';
 
 export {
   EditorComposer,

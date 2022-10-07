@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import ToolbarContext from '../../../context/ToolbarContext';
 import { UNDO_COMMAND } from 'lexical';
 import EditorContext from '../../../context/EditorContext';
-import { IS_APPLE } from '../../../shared/src/environment';
+import { IS_APPLE } from '../../../../shared/src/environment';
 
 const UndoButton = () => {
   const { canUndo } = useContext(ToolbarContext);

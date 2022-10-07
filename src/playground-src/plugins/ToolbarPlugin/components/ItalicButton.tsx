@@ -1,7 +1,7 @@
 import { FORMAT_TEXT_COMMAND } from 'lexical';
 import React from 'react';
 import { useContext } from 'react';
-import { IS_APPLE } from '../../../shared/src/environment';
+import { IS_APPLE } from '../../../../shared/src/environment';
 import EditorContext from '../../../context/EditorContext';
 import ToolbarContext from '../../../context/ToolbarContext';
 

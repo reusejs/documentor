@@ -26,7 +26,7 @@ import {
 } from 'lexical';
 
 import { useEffect } from 'react';
-import getSelection from '../shared-ts/src/getDOMSelection';
+import getSelection from '../../shared-ts/src/getDOMSelection';
 
 import {
   $createImageNode,

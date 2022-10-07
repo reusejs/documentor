@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react';
 import Select from '../../../ui/Select';
 import ToolbarContext from '../../../context/ToolbarContext';
-import { FontOptions } from '../../../types';
+import { FontOptions } from '../../../../types';
 
 const defaultFontFamilyOptions: FontOptions = [
   ['Arial', 'Arial'],
