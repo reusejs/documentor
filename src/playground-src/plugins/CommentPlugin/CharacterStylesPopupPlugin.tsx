@@ -27,7 +27,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 
-import { INSERT_INLINE_COMMAND } from './CommentPlugin';
+import { INSERT_INLINE_COMMAND } from '.';
 
 function setPopupPosition(
   editor: HTMLElement,

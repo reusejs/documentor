@@ -14,7 +14,7 @@ import {
   createThread,
   Thread,
   useCommentStore,
-} from '../commenting';
+} from '../../commenting';
 import type {
   EditorState,
   LexicalCommand,
@@ -22,7 +22,7 @@ import type {
   NodeKey,
 } from 'lexical';
 
-import './CommentPlugin.css';
+import './index.css';
 
 import {
   $createMarkNode,
@@ -55,13 +55,13 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
-import useLayoutEffect from '../../shared/src/useLayoutEffect';
+import useLayoutEffect from '../../../shared/src/useLayoutEffect';
 
-import useModal from '../hooks/useModal';
-import CommentEditorTheme from '../themes/CommentEditorTheme';
-import Button from '../ui/Button';
-import ContentEditable from '../ui/ContentEditable';
-import Placeholder from '../ui/Placeholder';
+import useModal from '../../hooks/useModal';
+import CommentEditorTheme from '../../themes/CommentEditorTheme';
+import Button from '../../ui/Button';
+import ContentEditable from '../../ui/ContentEditable';
+import Placeholder from '../../ui/Placeholder';
 import type { Doc } from 'yjs';
 import { useCollaborationContext } from '@lexical/react/LexicalCollaborationContext';
 import { WebsocketProvider } from 'y-websocket';
