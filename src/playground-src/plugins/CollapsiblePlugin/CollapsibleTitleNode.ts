@@ -19,8 +19,8 @@ import {
   Spread,
 } from 'lexical';
 
-import { $isCollapsibleContainerNode } from './CollapsibleContainerNode';
-import { $isCollapsibleContentNode } from './CollapsibleContentNode';
+import {$isCollapsibleContainerNode} from './CollapsibleContainerNode';
+import {$isCollapsibleContentNode} from './CollapsibleContentNode';
 
 type SerializedCollapsibleTitleNode = Spread<
   {
@@ -54,7 +54,7 @@ export class CollapsibleTitleNode extends ElementNode {
   }
 
   static importJSON(
-    serializedNode: SerializedCollapsibleTitleNode
+    serializedNode: SerializedCollapsibleTitleNode,
   ): CollapsibleTitleNode {
     return $createCollapsibleTitleNode();
   }
@@ -77,7 +77,7 @@ export class CollapsibleTitleNode extends ElementNode {
 
     if (!$isCollapsibleContainerNode(containerNode)) {
       throw new Error(
-        'CollapsibleTitleNode expects to be child of CollapsibleContainerNode'
+        'CollapsibleTitleNode expects to be child of CollapsibleContainerNode',
       );
     }
 
@@ -85,7 +85,7 @@ export class CollapsibleTitleNode extends ElementNode {
       const contentNode = this.getNextSibling();
       if (!$isCollapsibleContentNode(contentNode)) {
         throw new Error(
-          'CollapsibleTitleNode expects to have CollapsibleContentNode sibling'
+          'CollapsibleTitleNode expects to have CollapsibleContentNode sibling',
         );
       }
 
@@ -110,7 +110,7 @@ export function $createCollapsibleTitleNode(): CollapsibleTitleNode {
 }
 
 export function $isCollapsibleTitleNode(
-  node: LexicalNode | null | undefined
+  node: LexicalNode | null | undefined,
 ): node is CollapsibleTitleNode {
   return node instanceof CollapsibleTitleNode;
 }
