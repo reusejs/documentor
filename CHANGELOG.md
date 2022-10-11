@@ -1,5 +1,11 @@
 # @reusejs/documentor
 
+## 0.0.12
+
+### Patch Changes
+
+- 72ede08: Control toolbar with props
+
 ## 0.0.11
 
 ### Patch Changes
