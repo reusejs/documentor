@@ -5,7 +5,7 @@ import PlaygroundEditorTheme from './playground-src/themes/PlaygroundEditorTheme
 import './playground-src/index.css';
 import { SharedAutocompleteContext } from './playground-src/context/SharedAutocompleteContext';
 import { SharedHistoryContext } from './playground-src/context/SharedHistoryContext';
-import Editor from './playground-src/Documentor';
+import Editor from './custom/CustomEditor';
 import { TableContext } from './playground-src/plugins/TablePlugin';
 
 interface IEditorComposer {

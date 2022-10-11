@@ -23,49 +23,49 @@ import * as React from 'react';
 import { useRef, useState } from 'react';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 
-import { createWebsocketProvider } from './collaboration';
-import { useSettings } from './context/SettingsContext';
-import { useSharedHistoryContext } from './context/SharedHistoryContext';
-import TableCellNodes from './nodes/TableCellNodes';
-import ActionsPlugin from './plugins/ActionsPlugin';
-import AutocompletePlugin from './plugins/AutocompletePlugin';
-import AutoEmbedPlugin from './plugins/AutoEmbedPlugin';
-import AutoLinkPlugin from './plugins/AutoLinkPlugin';
-import ClickableLinkPlugin from './plugins/ClickableLinkPlugin';
-import CodeActionMenuPlugin from './plugins/CodeActionMenuPlugin';
-import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
-import CollapsiblePlugin from './plugins/CollapsiblePlugin';
-import CommentPlugin from './plugins/CommentPlugin';
-import ComponentPickerPlugin from './plugins/ComponentPickerPlugin';
-import DraggableBlockPlugin from './plugins/DraggableBlockPlugin';
-import EmojiPickerPlugin from './plugins/EmojiPickerPlugin';
-import EmojisPlugin from './plugins/EmojisPlugin';
-import EquationsPlugin from './plugins/EquationsPlugin';
-import ExcalidrawPlugin from './plugins/ExcalidrawPlugin';
-import FigmaPlugin from './plugins/FigmaPlugin';
-import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin';
-import FloatingTextFormatToolbarPlugin from './plugins/FloatingTextFormatToolbarPlugin';
-import HorizontalRulePlugin from './plugins/HorizontalRulePlugin';
-import ImagesPlugin from './plugins/ImagesPlugin';
-import KeywordsPlugin from './plugins/KeywordsPlugin';
-import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
-import MarkdownShortcutPlugin from './plugins/MarkdownShortcutPlugin';
-import { MaxLengthPlugin } from './plugins/MaxLengthPlugin';
-import MentionsPlugin from './plugins/MentionsPlugin';
-import PollPlugin from './plugins/PollPlugin';
-import SpeechToTextPlugin from './plugins/SpeechToTextPlugin';
-import TabFocusPlugin from './plugins/TabFocusPlugin';
-import TableCellActionMenuPlugin from './plugins/TableActionMenuPlugin';
-import TableCellResizer from './plugins/TableCellResizer';
-import TableOfContentsPlugin from './plugins/TableOfContentsPlugin';
-import { TablePlugin as NewTablePlugin } from './plugins/TablePlugin';
-import ToolbarPlugin from './plugins/ToolbarPlugin';
-import TreeViewPlugin from './plugins/TreeViewPlugin';
-import TwitterPlugin from './plugins/TwitterPlugin';
-import YouTubePlugin from './plugins/YouTubePlugin';
-import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
-import ContentEditable from './ui/ContentEditable';
-import Placeholder from './ui/Placeholder';
+import { createWebsocketProvider } from '../playground-src/collaboration';
+import { useSettings } from '../playground-src/context/SettingsContext';
+import { useSharedHistoryContext } from '../playground-src/context/SharedHistoryContext';
+import TableCellNodes from '../playground-src/nodes/TableCellNodes';
+import ActionsPlugin from '../playground-src/plugins/ActionsPlugin';
+import AutocompletePlugin from '../playground-src/plugins/AutocompletePlugin';
+import AutoEmbedPlugin from '../playground-src/plugins/AutoEmbedPlugin';
+import AutoLinkPlugin from '../playground-src/plugins/AutoLinkPlugin';
+import ClickableLinkPlugin from '../playground-src/plugins/ClickableLinkPlugin';
+import CodeActionMenuPlugin from '../playground-src/plugins/CodeActionMenuPlugin';
+import CodeHighlightPlugin from '../playground-src/plugins/CodeHighlightPlugin';
+import CollapsiblePlugin from '../playground-src/plugins/CollapsiblePlugin';
+import CommentPlugin from '../playground-src/plugins/CommentPlugin';
+import ComponentPickerPlugin from '../playground-src/plugins/ComponentPickerPlugin';
+import DraggableBlockPlugin from '../playground-src/plugins/DraggableBlockPlugin';
+import EmojiPickerPlugin from '../playground-src/plugins/EmojiPickerPlugin';
+import EmojisPlugin from '../playground-src/plugins/EmojisPlugin';
+import EquationsPlugin from '../playground-src/plugins/EquationsPlugin';
+import ExcalidrawPlugin from '../playground-src/plugins/ExcalidrawPlugin';
+import FigmaPlugin from '../playground-src/plugins/FigmaPlugin';
+import FloatingLinkEditorPlugin from '../playground-src/plugins/FloatingLinkEditorPlugin';
+import FloatingTextFormatToolbarPlugin from '../playground-src/plugins/FloatingTextFormatToolbarPlugin';
+import HorizontalRulePlugin from '../playground-src/plugins/HorizontalRulePlugin';
+import ImagesPlugin from '../playground-src/plugins/ImagesPlugin';
+import KeywordsPlugin from '../playground-src/plugins/KeywordsPlugin';
+import ListMaxIndentLevelPlugin from '../playground-src/plugins/ListMaxIndentLevelPlugin';
+import MarkdownShortcutPlugin from '../playground-src/plugins/MarkdownShortcutPlugin';
+import { MaxLengthPlugin } from '../playground-src/plugins/MaxLengthPlugin';
+import MentionsPlugin from '../playground-src/plugins/MentionsPlugin';
+import PollPlugin from '../playground-src/plugins/PollPlugin';
+import SpeechToTextPlugin from '../playground-src/plugins/SpeechToTextPlugin';
+import TabFocusPlugin from '../playground-src/plugins/TabFocusPlugin';
+import TableCellActionMenuPlugin from '../playground-src/plugins/TableActionMenuPlugin';
+import TableCellResizer from '../playground-src/plugins/TableCellResizer';
+import TableOfContentsPlugin from '../playground-src/plugins/TableOfContentsPlugin';
+import { TablePlugin as NewTablePlugin } from '../playground-src/plugins/TablePlugin';
+import ToolbarPlugin from './plugins/CustomToolbarPlugin';
+import TreeViewPlugin from '../playground-src/plugins/TreeViewPlugin';
+import TwitterPlugin from '../playground-src/plugins/TwitterPlugin';
+import YouTubePlugin from '../playground-src/plugins/YouTubePlugin';
+import PlaygroundEditorTheme from '../playground-src/themes/PlaygroundEditorTheme';
+import ContentEditable from '../playground-src/ui/ContentEditable';
+import Placeholder from '../playground-src/ui/Placeholder';
 import { LexicalEditor } from 'lexical';
 import { $generateHtmlFromNodes } from '@lexical/html';
 
@@ -196,7 +196,7 @@ export default function Editor({ onChange }: IEditorProps): JSX.Element {
               />
               <MentionsPlugin />
               <HistoryPlugin />
-              <ImagesPlugin captionsEnabled={false} />
+              <ImagesPlugin />
               <LinkPlugin />
               <ClickableLinkPlugin />
               <FloatingTextFormatToolbarPlugin />

@@ -5,6 +5,7 @@ const images = require('@rollup/plugin-image');
 module.exports = {
   rollup(config, options) {
     config.plugins = [
+      images(),
       postcss({
         inject: true, //  true
         extract: !!options.writeMeta,
