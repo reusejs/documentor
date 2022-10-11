@@ -2,17 +2,23 @@ import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import React, { useState } from 'react';
 import PlaygroundNodes from './playground-src/nodes/PlaygroundNodes';
 import PlaygroundEditorTheme from './playground-src/themes/PlaygroundEditorTheme';
-import './playground-src/index.css';
+import './playground-src/index_custom.css';
 import { SharedAutocompleteContext } from './playground-src/context/SharedAutocompleteContext';
 import { SharedHistoryContext } from './playground-src/context/SharedHistoryContext';
 import Editor from './custom/CustomEditor';
 import { TableContext } from './playground-src/plugins/TablePlugin';
+import { LexicalEditor } from 'lexical';
 
 interface IEditorComposer {
   initialEditorState?: string;
+  onChange?: (
+    payload: any,
+    editorState: string,
+    editorInstance?: LexicalEditor
+  ) => void;
 }
 
-const EditorComposer = ({ initialEditorState }: IEditorComposer) => {
+const EditorComposer = ({ initialEditorState, onChange }: IEditorComposer) => {
   const initialConfig = {
     namespace: 'ReuseJSDocumentorEditor',
     nodes: [...PlaygroundNodes],
@@ -28,11 +34,7 @@ const EditorComposer = ({ initialEditorState }: IEditorComposer) => {
         <TableContext>
           <SharedAutocompleteContext>
             <div className="editor-shell">
-              <Editor
-                onChange={(payload: any) => {
-                  console.log('onChange..', JSON.stringify(payload));
-                }}
-              />
+              <Editor onChange={onChange} />
             </div>
           </SharedAutocompleteContext>
         </TableContext>

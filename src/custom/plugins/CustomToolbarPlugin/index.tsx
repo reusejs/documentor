@@ -661,9 +661,17 @@ export default function ToolbarPlugin({
     codeBlock: false,
   },
   disabledInsertBlocks = {
+    image: true,
+    table: true,
     excalidraw: false,
     horizontalRule: false,
     gif: false,
+    poll: false,
+    newTable: false,
+    equation: false,
+    stickyNote: false,
+    collapsibleContainer: false,
+    embeds: false,
   },
 }: IToolbarProps): JSX.Element {
   const [editor] = useLexicalComposerContext();
@@ -1128,20 +1136,22 @@ export default function ToolbarPlugin({
                 <span className="text">Horizontal Rule</span>
               </DropDownItem>
             )}
-            <DropDownItem
-              onClick={() => {
-                showModal('Insert Image', (onClose) => (
-                  <InsertImageDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item"
-            >
-              <i className="icon image" />
-              <span className="text">Image</span>
-            </DropDownItem>
+            {disabledInsertBlocks?.image !== false && (
+              <DropDownItem
+                onClick={() => {
+                  showModal('Insert Image', (onClose) => (
+                    <InsertImageDialog
+                      activeEditor={activeEditor}
+                      onClose={onClose}
+                    />
+                  ));
+                }}
+                className="item"
+              >
+                <i className="icon image" />
+                <span className="text">Image</span>
+              </DropDownItem>
+            )}
             {disabledInsertBlocks?.gif !== false && (
               <DropDownItem
                 onClick={() =>
@@ -1170,100 +1180,115 @@ export default function ToolbarPlugin({
                 <span className="text">Excalidraw</span>
               </DropDownItem>
             )}
-            <DropDownItem
-              onClick={() => {
-                showModal('Insert Table', (onClose) => (
-                  <InsertTableDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item"
-            >
-              <i className="icon table" />
-              <span className="text">Table</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                showModal('Insert Table', (onClose) => (
-                  <InsertNewTableDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item"
-            >
-              <i className="icon table" />
-              <span className="text">Table (Experimental)</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                showModal('Insert Poll', (onClose) => (
-                  <InsertPollDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item"
-            >
-              <i className="icon poll" />
-              <span className="text">Poll</span>
-            </DropDownItem>
-
-            <DropDownItem
-              onClick={() => {
-                showModal('Insert Equation', (onClose) => (
-                  <InsertEquationDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item"
-            >
-              <i className="icon equation" />
-              <span className="text">Equation</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                editor.update(() => {
-                  const root = $getRoot();
-                  const stickyNode = $createStickyNode(0, 0);
-                  root.append(stickyNode);
-                });
-              }}
-              className="item"
-            >
-              <i className="icon sticky" />
-              <span className="text">Sticky Note</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                editor.dispatchCommand(INSERT_COLLAPSIBLE_COMMAND, undefined);
-              }}
-              className="item"
-            >
-              <i className="icon caret-right" />
-              <span className="text">Collapsible container</span>
-            </DropDownItem>
-            {EmbedConfigs.map((embedConfig) => (
+            {disabledInsertBlocks?.table !== false && (
               <DropDownItem
-                key={embedConfig.type}
                 onClick={() => {
-                  activeEditor.dispatchCommand(
-                    INSERT_EMBED_COMMAND,
-                    embedConfig.type
-                  );
+                  showModal('Insert Table', (onClose) => (
+                    <InsertTableDialog
+                      activeEditor={activeEditor}
+                      onClose={onClose}
+                    />
+                  ));
                 }}
                 className="item"
               >
-                {embedConfig.icon}
-                <span className="text">{embedConfig.contentName}</span>
+                <i className="icon table" />
+                <span className="text">Table</span>
               </DropDownItem>
-            ))}
+            )}
+            {disabledInsertBlocks?.newTable !== false && (
+              <DropDownItem
+                onClick={() => {
+                  showModal('Insert Table', (onClose) => (
+                    <InsertNewTableDialog
+                      activeEditor={activeEditor}
+                      onClose={onClose}
+                    />
+                  ));
+                }}
+                className="item"
+              >
+                <i className="icon table" />
+                <span className="text">Table (Experimental)</span>
+              </DropDownItem>
+            )}
+            {disabledInsertBlocks?.poll !== false && (
+              <DropDownItem
+                onClick={() => {
+                  showModal('Insert Poll', (onClose) => (
+                    <InsertPollDialog
+                      activeEditor={activeEditor}
+                      onClose={onClose}
+                    />
+                  ));
+                }}
+                className="item"
+              >
+                <i className="icon poll" />
+                <span className="text">Poll</span>
+              </DropDownItem>
+            )}
+            {disabledInsertBlocks?.equation !== false && (
+              <DropDownItem
+                onClick={() => {
+                  showModal('Insert Equation', (onClose) => (
+                    <InsertEquationDialog
+                      activeEditor={activeEditor}
+                      onClose={onClose}
+                    />
+                  ));
+                }}
+                className="item"
+              >
+                <i className="icon equation" />
+                <span className="text">Equation</span>
+              </DropDownItem>
+            )}
+            {disabledInsertBlocks?.stickyNote !== false && (
+              <DropDownItem
+                onClick={() => {
+                  editor.update(() => {
+                    const root = $getRoot();
+                    const stickyNode = $createStickyNode(0, 0);
+                    root.append(stickyNode);
+                  });
+                }}
+                className="item"
+              >
+                <i className="icon sticky" />
+                <span className="text">Sticky Note</span>
+              </DropDownItem>
+            )}
+            {disabledInsertBlocks?.collapsibleContainer !== false && (
+              <DropDownItem
+                onClick={() => {
+                  editor.dispatchCommand(INSERT_COLLAPSIBLE_COMMAND, undefined);
+                }}
+                className="item"
+              >
+                <i className="icon caret-right" />
+                <span className="text">Collapsible container</span>
+              </DropDownItem>
+            )}
+            {disabledInsertBlocks?.embeds !== false && (
+              <>
+                {EmbedConfigs.map((embedConfig) => (
+                  <DropDownItem
+                    key={embedConfig.type}
+                    onClick={() => {
+                      activeEditor.dispatchCommand(
+                        INSERT_EMBED_COMMAND,
+                        embedConfig.type
+                      );
+                    }}
+                    className="item"
+                  >
+                    {embedConfig.icon}
+                    <span className="text">{embedConfig.contentName}</span>
+                  </DropDownItem>
+                ))}
+              </>
+            )}
           </DropDown>
         </>
       )}

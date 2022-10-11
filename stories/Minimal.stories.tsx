@@ -1,26 +1,5 @@
 import React, { useState } from 'react';
-import { EditorComposer, Editor, Divider } from '../src';
-import ToolbarPlugin from '../src/plugins/ToolbarPlugin/ToolbarPlugin';
-
-import {
-  AlignDropdown,
-  BackgroundColorPicker,
-  BlockFormatDropdown,
-  BoldButton,
-  CodeFormatButton,
-  CodeLanguageDropdown,
-  FloatingLinkEditor,
-  FontFamilyDropdown,
-  FontSizeDropdown,
-  InsertDropdown,
-  InsertLinkButton,
-  ItalicButton,
-  RedoButton,
-  TextColorPicker,
-  TextFormatDropdown,
-  UnderlineButton,
-  UndoButton,
-} from '../src/plugins/ToolbarPlugin/components';
+import { EditorComposer } from '../src';
 
 export default {
   title: 'Minimal',
@@ -43,6 +22,9 @@ export const FullEditor = () => {
         initialEditorState={
           '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Rajiv Seelam","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
         }
+        onChange={(payload: any) => {
+          console.log('onChange - ', JSON.stringify(payload));
+        }}
       ></EditorComposer>
       <div
         style={{

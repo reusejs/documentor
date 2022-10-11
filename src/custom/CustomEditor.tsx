@@ -74,6 +74,16 @@ const skipCollaborationInit =
   window.parent != null && window.parent.frames.right === window;
 
 interface IEditorProps {
+  isCollab?: boolean;
+  isAutocomplete?: boolean;
+  isMaxLength?: boolean;
+  isCharLimit?: boolean;
+  isCharLimitUtf8?: boolean;
+  isRichText?: boolean;
+  showTreeView?: boolean;
+  showTableOfContents?: boolean;
+  showActions?: boolean;
+  enableComments?: boolean;
   onChange?: (
     payload: any,
     editorState: string,
@@ -81,20 +91,20 @@ interface IEditorProps {
   ) => void;
 }
 
-export default function Editor({ onChange }: IEditorProps): JSX.Element {
+export default function Editor({
+  isCollab = false,
+  isAutocomplete = false,
+  isMaxLength = false,
+  isCharLimit = false,
+  isCharLimitUtf8 = false,
+  isRichText = true,
+  showTreeView = false,
+  showTableOfContents = false,
+  showActions = false,
+  enableComments = false,
+  onChange,
+}: IEditorProps): JSX.Element {
   const { historyState } = useSharedHistoryContext();
-  const {
-    settings: {
-      isCollab,
-      isAutocomplete,
-      isMaxLength,
-      isCharLimit,
-      isCharLimitUtf8,
-      isRichText,
-      showTreeView,
-      showTableOfContents,
-    },
-  } = useSettings();
   const text = isCollab
     ? 'Enter some collaborative rich text...'
     : isRichText
@@ -142,9 +152,11 @@ export default function Editor({ onChange }: IEditorProps): JSX.Element {
         <SpeechToTextPlugin />
         <AutoLinkPlugin />
         <AutoScrollPlugin scrollRef={scrollRef} />
-        <CommentPlugin
-          providerFactory={isCollab ? createWebsocketProvider : undefined}
-        />
+        {enableComments && (
+          <CommentPlugin
+            providerFactory={isCollab ? createWebsocketProvider : undefined}
+          />
+        )}
         {isRichText ? (
           <>
             {isCollab ? (
@@ -242,7 +254,7 @@ export default function Editor({ onChange }: IEditorProps): JSX.Element {
         <div className="toc">
           {showTableOfContents && <TableOfContentsPlugin />}
         </div>
-        <ActionsPlugin isRichText={isRichText} />
+        {showActions && <ActionsPlugin isRichText={isRichText} />}
       </div>
       {showTreeView && <TreeViewPlugin />}
     </>
