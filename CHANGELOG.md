@@ -1,5 +1,11 @@
 # @reusejs/documentor
 
+## 0.0.11
+
+### Patch Changes
+
+- 7ee0a8f: Align with playground-src
+
 ## 0.0.10
 
 ### Patch Changes
