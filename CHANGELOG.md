@@ -1,5 +1,11 @@
 # @reusejs/documentor
 
+## 0.0.15
+
+### Patch Changes
+
+- f359d86: Remove sample image insert
+
 ## 0.0.13
 
 ### Patch Changes
