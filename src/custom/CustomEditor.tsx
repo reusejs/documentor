@@ -84,6 +84,7 @@ interface IEditorProps {
   showTableOfContents?: boolean;
   showActions?: boolean;
   enableComments?: boolean;
+  floatingFormatter?: boolean;
   onChange?: (
     payload: any,
     editorState: string,
@@ -102,6 +103,7 @@ export default function Editor({
   showTableOfContents = false,
   showActions = false,
   enableComments = false,
+  floatingFormatter = false,
   onChange,
 }: IEditorProps): JSX.Element {
   const { historyState } = useSharedHistoryContext();
@@ -225,7 +227,7 @@ export default function Editor({
             <ExcalidrawPlugin />
             <TabFocusPlugin />
             <CollapsiblePlugin />
-            {floatingAnchorElem && (
+            {floatingFormatter && floatingAnchorElem && (
               <>
                 <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
                 <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
