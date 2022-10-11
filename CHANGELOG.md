@@ -1,5 +1,11 @@
 # @reusejs/documentor
 
+## 0.0.16
+
+### Patch Changes
+
+- fde7209: Improve onChange handling
+
 ## 0.0.15
 
 ### Patch Changes
