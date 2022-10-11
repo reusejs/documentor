@@ -41,27 +41,9 @@ export const FullEditor = () => {
     <div>
       <EditorComposer
         initialEditorState={
-          '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Rajiv Seelam","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"heading","version":1,"tag":"h1"}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+          '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Rajiv Seelam","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
         }
-      >
-        <Editor
-          onChange={(payload: any) => {
-            setContent(payload);
-            console.log('onChange', JSON.stringify(payload));
-          }}
-        >
-          <ToolbarPlugin defaultFontFamily="Verdana">
-            <BoldButton />
-            <ItalicButton />
-            <UnderlineButton />
-            <InsertLinkButton />
-            <TextColorPicker />
-            <BackgroundColorPicker />
-            <Divider />
-            <InsertDropdown />
-          </ToolbarPlugin>
-        </Editor>
-      </EditorComposer>
+      ></EditorComposer>
       <div
         style={{
           background: 'yellow',

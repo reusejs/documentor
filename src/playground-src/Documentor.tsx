@@ -21,6 +21,7 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { TablePlugin } from '@lexical/react/LexicalTablePlugin';
 import * as React from 'react';
 import { useRef, useState } from 'react';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 
 import { createWebsocketProvider } from './collaboration';
 import { useSettings } from './context/SettingsContext';
@@ -65,12 +66,22 @@ import YouTubePlugin from './plugins/YouTubePlugin';
 import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
 import ContentEditable from './ui/ContentEditable';
 import Placeholder from './ui/Placeholder';
+import { LexicalEditor } from 'lexical';
+import { $generateHtmlFromNodes } from '@lexical/html';
 
 const skipCollaborationInit =
   // @ts-ignore
   window.parent != null && window.parent.frames.right === window;
 
-export default function Editor(): JSX.Element {
+interface IEditorProps {
+  onChange?: (
+    payload: any,
+    editorState: string,
+    editorInstance?: LexicalEditor
+  ) => void;
+}
+
+export default function Editor({ onChange }: IEditorProps): JSX.Element {
   const { historyState } = useSharedHistoryContext();
   const {
     settings: {
@@ -155,6 +166,19 @@ export default function Editor(): JSX.Element {
               }
               placeholder={placeholder}
             />
+            <OnChangePlugin
+              onChange={(editorState, editor: any) => {
+                editor.update(() => {
+                  let payload: any = {};
+
+                  const htmlString = $generateHtmlFromNodes(editor, null);
+                  payload['html'] = htmlString;
+                  payload['json'] = JSON.stringify(editor.getEditorState());
+                  onChange?.(payload, JSON.stringify(editorState), editor);
+                });
+              }}
+            />
+
             <MarkdownShortcutPlugin />
             <CodeHighlightPlugin />
             <ListPlugin />
