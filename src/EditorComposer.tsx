@@ -11,11 +11,7 @@ import { LexicalEditor } from 'lexical';
 
 interface IEditorComposer {
   initialEditorState?: string;
-  onChange?: (
-    payload: any,
-    editorState: string,
-    editorInstance?: LexicalEditor
-  ) => void;
+  onChange?: (payload: any) => void;
 }
 
 const EditorComposer = ({ initialEditorState, onChange }: IEditorComposer) => {

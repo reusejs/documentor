@@ -66,8 +66,38 @@ import YouTubePlugin from '../playground-src/plugins/YouTubePlugin';
 import PlaygroundEditorTheme from '../playground-src/themes/PlaygroundEditorTheme';
 import ContentEditable from '../playground-src/ui/ContentEditable';
 import Placeholder from '../playground-src/ui/Placeholder';
-import { LexicalEditor } from 'lexical';
+import { LexicalEditor, EditorState } from 'lexical';
 import { $generateHtmlFromNodes } from '@lexical/html';
+import { useDebouncedCallback } from 'use-debounce';
+import { $getRoot } from 'lexical';
+
+function useDebouncedLexicalOnChange<T>(
+  getEditorState: (editorState: EditorState, editor: LexicalEditor) => T,
+  callback: (value: T) => void,
+  delay: number
+) {
+  const lastPayloadRef = React.useRef<T | null>(null);
+  const callbackRef = React.useRef<(arg: T) => void | null>(callback);
+  React.useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
+  const callCallbackWithLastPayload = React.useCallback(() => {
+    if (lastPayloadRef.current) {
+      callbackRef.current?.(lastPayloadRef.current);
+    }
+  }, []);
+  const call = useDebouncedCallback(callCallbackWithLastPayload, delay);
+  const onChange = React.useCallback(
+    (editorState, editor) => {
+      editorState.read(() => {
+        lastPayloadRef.current = getEditorState(editorState, editor);
+        call();
+      });
+    },
+    [call, getEditorState]
+  );
+  return onChange;
+}
 
 const skipCollaborationInit =
   // @ts-ignore
@@ -85,12 +115,14 @@ interface IEditorProps {
   showActions?: boolean;
   enableComments?: boolean;
   floatingFormatter?: boolean;
-  onChange?: (
-    payload: any,
-    editorState: string,
-    editorInstance?: LexicalEditor
-  ) => void;
+  onChange?: (payload: any) => void;
 }
+
+const getEditorState = (editorState: EditorState, editor: LexicalEditor) => ({
+  text: $getRoot().getTextContent(),
+  html: $generateHtmlFromNodes(editor, null),
+  json: JSON.stringify(editorState),
+});
 
 export default function Editor({
   isCollab = false,
@@ -131,6 +163,18 @@ export default function Editor({
     },
     theme: PlaygroundEditorTheme,
   };
+
+  const debouncedOnChange = React.useCallback((value) => {
+    // console.log(new Date(), value);
+    onChange?.(value);
+    // TODO: send to server
+  }, []);
+
+  const onInternalChange = useDebouncedLexicalOnChange(
+    getEditorState,
+    debouncedOnChange,
+    1000
+  );
 
   return (
     <>
@@ -181,16 +225,17 @@ export default function Editor({
               placeholder={placeholder}
             />
             <OnChangePlugin
-              onChange={(editorState, editor: any) => {
-                editor.update(() => {
-                  let payload: any = {};
-
-                  const htmlString = $generateHtmlFromNodes(editor, null);
-                  payload['html'] = htmlString;
-                  payload['json'] = JSON.stringify(editor.getEditorState());
-                  onChange?.(payload, JSON.stringify(editorState), editor);
-                });
-              }}
+              onChange={onInternalChange}
+              // onChange={(editorState, editor: any) => {
+              //   // editor.update(() => {
+              //   //   let payload: any = {};
+              //   //   console.log('editor updated');
+              //   //   // const htmlString = $generateHtmlFromNodes(editor, null);
+              //   //   // payload['html'] = htmlString;
+              //   //   // payload['json'] = JSON.stringify(editor.getEditorState());
+              //   //   // onChange?.(payload, JSON.stringify(editorState), editor);
+              //   // });
+              // }}
             />
 
             <MarkdownShortcutPlugin />
@@ -227,12 +272,17 @@ export default function Editor({
             <ExcalidrawPlugin />
             <TabFocusPlugin />
             <CollapsiblePlugin />
+            {floatingAnchorElem && (
+              <>
+                <TableCellActionMenuPlugin anchorElem={floatingAnchorElem} />
+              </>
+            )}
+
             {floatingFormatter && floatingAnchorElem && (
               <>
                 <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
                 <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
                 <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
-                <TableCellActionMenuPlugin anchorElem={floatingAnchorElem} />
                 <FloatingTextFormatToolbarPlugin
                   anchorElem={floatingAnchorElem}
                 />
