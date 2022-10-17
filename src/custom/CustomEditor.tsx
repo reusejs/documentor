@@ -275,6 +275,7 @@ export default function Editor({
             {floatingAnchorElem && (
               <>
                 <TableCellActionMenuPlugin anchorElem={floatingAnchorElem} />
+                <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
               </>
             )}
 
@@ -282,7 +283,6 @@ export default function Editor({
               <>
                 <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
                 <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
-                <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
                 <FloatingTextFormatToolbarPlugin
                   anchorElem={floatingAnchorElem}
                 />
