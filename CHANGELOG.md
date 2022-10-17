@@ -1,5 +1,11 @@
 # @reusejs/documentor
 
+## 0.0.17
+
+### Patch Changes
+
+- 7e6e6a8: Enable link editor
+
 ## 0.0.16
 
 ### Patch Changes
