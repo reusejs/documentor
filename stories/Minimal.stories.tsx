@@ -24,7 +24,7 @@ export const FullEditor = () => {
         }
         onChange={(payload: any) => {
           setContent(payload);
-          console.log('onChange - ', JSON.stringify(payload));
+          // console.log('onChange - ', JSON.stringify(payload));
         }}
       ></EditorComposer>
       <div
