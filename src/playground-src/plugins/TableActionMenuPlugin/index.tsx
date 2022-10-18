@@ -6,7 +6,7 @@
  *
  */
 
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
   $deleteTableColumn,
   $getElementGridForTableNode,
@@ -31,11 +31,11 @@ import {
   DEPRECATED_$isGridSelection,
 } from 'lexical';
 import * as React from 'react';
-import {ReactPortal, useCallback, useEffect, useRef, useState} from 'react';
-import {createPortal} from 'react-dom';
+import { ReactPortal, useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 type TableCellActionMenuProps = Readonly<{
-  contextRef: {current: null | HTMLElement};
+  contextRef: { current: null | HTMLElement };
   onClose: () => void;
   setIsMenuOpen: (isOpen: boolean) => void;
   tableCellNode: TableCellNode;
@@ -96,9 +96,13 @@ function TableActionMenu({
         menuButtonRect.left + menuButtonRect.width + window.pageXOffset + 5
       }px`;
 
-      dropDownElement.style.top = `${
-        menuButtonRect.top + window.pageYOffset
-      }px`;
+      // console.log('menuButtonRect.top', menuButtonRect.top, window.pageYOffset);
+
+      // dropDownElement.style.top = `${
+      //   menuButtonRect.top + window.pageYOffset
+      // }px`;
+
+      dropDownElement.style.top = `${menuButtonRect.top}px`;
     }
   }, [contextRef, dropDownRef]);
 
@@ -124,7 +128,7 @@ function TableActionMenu({
       if (tableCellNode.isAttached()) {
         const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode);
         const tableElement = editor.getElementByKey(
-          tableNode.getKey(),
+          tableNode.getKey()
         ) as HTMLTableElementWithWithTableSelectionState;
 
         if (!tableElement) {
@@ -170,7 +174,7 @@ function TableActionMenu({
           tableRowIndex,
           shouldInsertAfter,
           selectionCounts.rows,
-          grid,
+          grid
         );
 
         clearTableSelection();
@@ -178,7 +182,7 @@ function TableActionMenu({
         onClose();
       });
     },
-    [editor, tableCellNode, selectionCounts.rows, clearTableSelection, onClose],
+    [editor, tableCellNode, selectionCounts.rows, clearTableSelection, onClose]
   );
 
   const insertTableColumnAtSelection = useCallback(
@@ -207,7 +211,7 @@ function TableActionMenu({
           tableColumnIndex,
           shouldInsertAfter,
           selectionCounts.columns,
-          grid,
+          grid
         );
 
         clearTableSelection();
@@ -221,7 +225,7 @@ function TableActionMenu({
       selectionCounts.columns,
       clearTableSelection,
       onClose,
-    ],
+    ]
   );
 
   const deleteTableRowAtSelection = useCallback(() => {
@@ -334,7 +338,8 @@ function TableActionMenu({
       ref={dropDownRef}
       onClick={(e) => {
         e.stopPropagation();
-      }}>
+      }}
+    >
       <button className="item" onClick={() => insertTableRowAtSelection(false)}>
         <span className="text">
           Insert{' '}
@@ -352,7 +357,8 @@ function TableActionMenu({
       <hr />
       <button
         className="item"
-        onClick={() => insertTableColumnAtSelection(false)}>
+        onClick={() => insertTableColumnAtSelection(false)}
+      >
         <span className="text">
           Insert{' '}
           {selectionCounts.columns === 1
@@ -363,7 +369,8 @@ function TableActionMenu({
       </button>
       <button
         className="item"
-        onClick={() => insertTableColumnAtSelection(true)}>
+        onClick={() => insertTableColumnAtSelection(true)}
+      >
         <span className="text">
           Insert{' '}
           {selectionCounts.columns === 1
@@ -402,7 +409,7 @@ function TableActionMenu({
         </span>
       </button>
     </div>,
-    document.body,
+    document.body
   );
 }
 
@@ -418,7 +425,7 @@ function TableCellActionMenuContainer({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [tableCellNode, setTableMenuCellNode] = useState<TableCellNode | null>(
-    null,
+    null
   );
 
   const moveMenu = useCallback(() => {
@@ -441,7 +448,7 @@ function TableCellActionMenuContainer({
       rootElement.contains(nativeSelection.anchorNode)
     ) {
       const tableCellNodeFromSelection = $getTableCellNodeFromLexicalNode(
-        selection.anchor.getNode(),
+        selection.anchor.getNode()
       );
 
       if (tableCellNodeFromSelection == null) {
@@ -450,7 +457,7 @@ function TableCellActionMenuContainer({
       }
 
       const tableCellParentNodeDOM = editor.getElementByKey(
-        tableCellNodeFromSelection.getKey(),
+        tableCellNodeFromSelection.getKey()
       );
 
       if (tableCellParentNodeDOM == null) {
@@ -516,7 +523,8 @@ function TableCellActionMenuContainer({
               e.stopPropagation();
               setIsMenuOpen(!isMenuOpen);
             }}
-            ref={menuRootRef}>
+            ref={menuRootRef}
+          >
             <i className="chevron-down" />
           </button>
           {isMenuOpen && (
@@ -540,6 +548,6 @@ export default function TableActionMenuPlugin({
 }): ReactPortal {
   return createPortal(
     <TableCellActionMenuContainer anchorElem={anchorElem} />,
-    anchorElem,
+    anchorElem
   );
 }
